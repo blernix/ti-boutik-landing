@@ -24,6 +24,17 @@ export default function MentionsLegales() {
           Mentions légales
         </h1>
 
+        <p className="mt-4 text-sm text-zinc-600">
+          Les conditions de vente du service sont dans les{" "}
+          <Link
+            href="/cgv"
+            className="font-semibold text-emerald-800 underline underline-offset-4"
+          >
+            conditions générales de vente
+          </Link>
+          .
+        </p>
+
         <div className="mt-10 space-y-10">
           <section>
             <h2 className="text-xl font-bold tracking-tight">

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
       "Ti-Boutik — Site e-commerce & commandes WhatsApp en Guadeloupe et aux Antilles",
   },
   description:
-    "Ti-Boutik crée votre site e-commerce sur mesure en Guadeloupe et aux Antilles : catalogue en ligne, commandes et paiement par carte (Stripe, Apple Pay, Google Pay, PayPal) directement sur WhatsApp. Restaurants, location de voitures, excursions, boutiques, artisans.",
+    "Boutique en ligne pour restaurants, snacks et traiteurs en Guadeloupe : les commandes arrivent déjà rédigées sur WhatsApp. 0 € pour créer, 39 €/mois pour publier, sans engagement.",
   alternates: {
     canonical: "/",
   },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title:
       "Ti-Boutik — Site e-commerce & commandes WhatsApp en Guadeloupe et aux Antilles",
     description:
-      "Votre mini-site sur mesure, trouvable sur Google partout en Guadeloupe et aux Antilles, relié à votre WhatsApp. Commandez et payez en ligne, sans back-office.",
+      "Votre boutique en ligne, les commandes déjà rédigées sur WhatsApp. 0 € pour créer, 39 €/mois pour publier.",
     url: SITE_URL,
   },
 };

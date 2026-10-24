@@ -4,100 +4,114 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Banknote,
-  BedDouble,
-  Car,
-  CarTaxiFront,
-  ChevronDown,
-  CreditCard,
-  Globe,
-  MessageCircle,
-  Package,
-  Sailboat,
-  Scissors,
-  Search,
-  Sparkles,
-  Store,
-  UtensilsCrossed,
-  Wrench,
-} from "lucide-react";
-import {
-  ApplePayIcon,
-  GooglePayIcon,
-  PayPalIcon,
-  WhatsAppIcon,
-} from "@/components/icons";
-import {
-  CommerceShowcase,
-  HeroPhone,
-  SearchDemo,
-} from "@/components/landing-animations";
+import { ArrowRight, Check, ChevronDown, MessageCircle, Star } from "lucide-react";
+import { WhatsAppIcon, StripeIcon } from "@/components/icons";
+import { HeroPhone } from "@/components/landing-animations";
 
 const CONTACT_WHATSAPP = "https://wa.me/590691244857";
-const CONTACT_EMAIL = "mailto:killian.lecrut@gmail.com";
+const CONTACT_EMAIL = "mailto:contact@ti-boutik.fr";
+const CONTACT_TEL = "+590 691 24 48 57";
+const CONTACT_ADRESSE = "contact@ti-boutik.fr";
 
-const METIERS = [
-  { icon: <UtensilsCrossed className="h-5 w-5" />, label: "Restaurants & traiteurs" },
-  { icon: <Car className="h-5 w-5" />, label: "Location de voitures & bateaux" },
-  { icon: <Sailboat className="h-5 w-5" />, label: "Excursions & activités" },
-  { icon: <Store className="h-5 w-5" />, label: "Boutiques & artisans" },
-  { icon: <Scissors className="h-5 w-5" />, label: "Coiffeurs & barbiers" },
-  { icon: <Wrench className="h-5 w-5" />, label: "Services & réparations" },
-  { icon: <CarTaxiFront className="h-5 w-5" />, label: "Taxis & VTC" },
-  { icon: <BedDouble className="h-5 w-5" />, label: "Locations de vacances" },
-  { icon: <Sparkles className="h-5 w-5" />, label: "Beauté & bien-être" },
-  { icon: <Package className="h-5 w-5" />, label: "Click & collect" },
+/* L'application : créer une boutique, revenir dans la sienne. */
+const APP_URL = "https://app.ti-boutik.fr";
+const LIEN_CREER = `${APP_URL}/inscription`;
+const LIEN_CONNEXION = `${APP_URL}/boutique/connexion`;
+
+/* La fiche Google de Killian : 5,0 · 3 avis au 23/10. Le lien porte l'identifiant
+   de la fiche (place_id), pas une recherche par nom — sinon il tombe sur un homonyme. */
+const AVIS_GOOGLE =
+  "https://www.google.com/maps/search/?api=1&query=ti-boutik&query_place_id=ChIJWyvjQw1Dh6oR2GyHPWee2k4";
+const NOTE_GOOGLE = "5,0";
+const NB_AVIS = 3;
+
+const PRIX = "39 €";
+
+const PREUVES = [
+  "0 % de commission sur vos ventes",
+  "Sans engagement, résiliable en un clic",
+  "Je réponds moi-même sur WhatsApp",
 ];
 
-const SEO_POINTS = [
+/* Une ligne par situation vécue : ce qui coûte aujourd'hui, ce que ça devient. */
+const AVANT_APRES: [string, string][] = [
+  ["« C'est combien le poulet ? » — vous répondez six fois par jour", "Il voit votre carte, vos prix, vos options"],
+  ["Vous recopiez la commande, vous oubliez la sauce", "Le récapitulatif arrive écrit, avec la référence"],
+  ["Vous cherchez le message dans quarante conversations", "Chaque commande a sa référence"],
+  ["Un client qui ne vous connaît pas ne vous trouve pas", "Votre boutique s'affiche sur son téléphone"],
+];
+
+const FONCTIONS = [
   {
-    title: "Page optimisée pour Google",
-    text: "Chaque site est conçu et rédigé pour être bien référencé dès sa mise en ligne.",
+    icon: <MessageCircle className="h-6 w-6" />,
+    titre: "Les commandes sur WhatsApp",
+    texte:
+      "Le client valide son panier : vous recevez le récapitulatif déjà rédigé, avec la référence. Même conversation, même habitude.",
   },
   {
-    title: "Données structurées",
-    text: "Votre menu, vos horaires et vos avis sont lus et affichés directement par Google.",
+    icon: <StripeIcon className="h-6 w-6" />,
+    titre: "Le paiement par carte",
+    texte:
+      "Un compte Stripe gratuit, créé depuis votre espace en cinq minutes : carte, Apple Pay, Google Pay, PayPal. L'argent va sur votre compte, pas chez nous.",
   },
   {
-    title: "Fiche Google Business reliée",
-    text: "On relie votre site à votre fiche pour apparaître sur Google Maps et les recherches locales.",
+    icon: <Check className="h-6 w-6" />,
+    titre: "Votre carte, gérée par vous",
+    texte:
+      "Plats, prix, photos, options, stock, retrait à une date : vous changez tout depuis votre téléphone, sans nous appeler.",
+  },
+];
+
+const ET_AUSSI = [
+  "Horaires et créneaux de retrait",
+  "Fermetures exceptionnelles annoncées",
+  "Photos illimitées",
+  "Votre adresse votrenom.ti-boutik.fr",
+  "Page prête pour Google : menu, horaires, adresse",
+];
+
+const OBJECTIONS = [
+  {
+    titre: "« Je n'ai pas le temps. »",
+    texte:
+      "Dix minutes depuis votre téléphone. Vous pouvez arrêter en cours de route : vous n'avez rien payé.",
   },
   {
-    title: "Mots-clés locaux",
-    text: "Votre site ressort quand on cherche votre métier suivi de votre commune, de la Guadeloupe ou des Antilles.",
+    titre: "« Je ne suis pas doué en informatique. »",
+    texte:
+      "Rien à installer, rien à mettre à jour. Si vous bloquez, je le fais avec vous sur WhatsApp.",
+  },
+  {
+    titre: "« Mes clients commandent déjà sur WhatsApp. »",
+    texte:
+      "C'est le principe : rien ne change pour eux. Vous recevez un panier au lieu d'un message à recopier.",
   },
 ];
 
 const FAQ_ITEMS = [
   {
     q: "Combien ça coûte ?",
-    a: "400 € pour la création de votre site, un prix fixe. À partir de la deuxième année, comptez 100 € par an d'hébergement. Aucun abonnement, aucune commission sur vos ventes : seuls les frais bancaires Stripe s'appliquent.",
+    a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, comme sur tout paiement par carte.",
   },
   {
     q: "Combien de temps pour être en ligne ?",
-    a: "Quelques jours. On récupère vos informations et vos photos, je crée votre site, puis on active les paiements ensemble.",
+    a: "Une dizaine de minutes depuis votre téléphone : votre nom, votre carte, vos prix. Le paiement par carte demande quelques minutes de plus, chez Stripe.",
   },
   {
-    q: "Faut-il un terminal de paiement ou du matériel ?",
-    a: "Non. Tout se passe depuis votre téléphone avec WhatsApp. Le paiement se fait en ligne par carte, Apple Pay, Google Pay ou PayPal, ou en espèces à la réception.",
+    q: "Et le paiement par carte, comment ça marche ?",
+    a: "Un compte Stripe gratuit, à créer depuis votre espace (lien dans la page Paiements) — c'est ce lien qui le relie à votre boutique. Carte, Apple Pay, Google Pay, PayPal. L'argent va sur votre compte. Ne créez pas de compte Stripe de votre côté : non relié, le paiement resterait bloqué.",
   },
   {
-    q: "Comment je modifie mes produits, mes prix ou mes photos ?",
-    a: "Vous gérez votre catalogue vous-même, simplement, sans compétence technique. Vous gardez la main à tout moment.",
+    q: "Je ne suis pas doué en informatique…",
+    a: "Rien à installer, rien à mettre à jour, tout se règle depuis votre téléphone. Si vous bloquez, je le fais avec vous sur WhatsApp.",
   },
   {
-    q: "Ai-je besoin de compétences techniques ?",
-    a: "Aucune. Je m'occupe de la création et de la technique ; vous ne faites que gérer votre contenu et répondre sur WhatsApp.",
+    q: "Et si j'arrête ?",
+    a: "Votre boutique passe en pause : elle n'est plus commandable, mais rien n'est supprimé. Vous reprenez l'abonnement plus tard et retrouvez votre catalogue tel quel.",
   },
   {
-    q: "Est-ce que je garde mes clients actuels ?",
-    a: "Oui. Rien ne change pour eux : ils continuent de vous écrire sur WhatsApp, comme avant.",
-  },
-  {
-    q: "Le paiement en ligne est-il sûr ?",
-    a: "Oui. Les paiements passent par Stripe, un leader mondial du paiement, et l'argent arrive directement sur votre compte bancaire.",
+    q: "Mon métier n'est pas un restaurant",
+    a: "Aujourd'hui la plateforme est ouverte aux restaurants, snacks et traiteurs. Les autres métiers arrivent : écrivez-moi, je vous préviens dès que c'est prêt pour vous.",
   },
 ];
 
@@ -106,54 +120,58 @@ export default function Landing() {
     <div className="min-h-screen bg-cream text-foreground">
       <Header />
 
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 pb-20 pt-20 text-white">
+      {/* 1. Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 pb-16 pt-16 text-white sm:pt-20">
         <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-amber-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-teal-300/15 blur-3xl" />
 
-        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
+        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
           <div className="text-center lg:text-left">
             <FadeIn>
-              <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-                Votre site web à vous,
-                <br className="hidden sm:block" /> vos commandes{" "}
-                <span className="text-wa">sur WhatsApp</span>.
-              </h1>
+              <p className="text-xs font-bold uppercase tracking-[.14em] text-amber-300">
+                Pour les restaurants, snacks &amp; traiteurs — Guadeloupe &amp;
+                Antilles
+              </p>
             </FadeIn>
             <FadeIn delay={0.05}>
-              <div className="mt-5">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold text-amber-200 backdrop-blur">
-                  Pensé pour la Guadeloupe &amp; les Antilles
-                </span>
-              </div>
+              <h1 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+                Votre boutique en ligne.
+                <br className="hidden sm:block" /> Les commandes arrivent{" "}
+                <span className="text-wa">déjà rédigées</span> sur WhatsApp.
+              </h1>
             </FadeIn>
             <FadeIn delay={0.1}>
               <p className="mx-auto mt-5 max-w-xl text-lg text-emerald-50/90 lg:mx-0">
-                Quel que soit votre métier, un mini-site à votre domaine,
-                trouvable sur Google partout en Guadeloupe et aux Antilles,
-                relié à votre WhatsApp Business. Vos clients commandent et
-                paient en ligne — vous, vous restez sur WhatsApp.
+                Votre carte, vos prix, vos horaires : tout se règle depuis votre
+                téléphone, en 10 minutes. {PRIX}/mois seulement quand vous
+                publiez.{" "}
+                <span className="font-semibold text-white">
+                  0 % de commission sur vos ventes.
+                </span>
               </p>
             </FadeIn>
             <FadeIn delay={0.15}>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
-                <Link
-                  href="/demo"
+                <a
+                  href={LIEN_CREER}
                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:w-auto"
                 >
-                  Voir la démo interactive
+                  Créer ma boutique
                   <ArrowRight className="h-5 w-5" />
-                </Link>
-                <a
-                  href={CONTACT_WHATSAPP}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-wa px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-green-600/30 transition hover:brightness-105 sm:w-auto"
-                >
-                  <WhatsAppIcon className="h-5 w-5" />
-                  Prendre contact
                 </a>
+                <Link
+                  href="/demo"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/10 px-6 py-3.5 text-base font-bold text-white backdrop-blur transition hover:bg-white/20 sm:w-auto"
+                >
+                  Voir la démo (30 s)
+                </Link>
               </div>
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <p className="mt-4 text-sm text-emerald-100/70">
+                Gratuit pour créer · sans carte bancaire · en privé tant que vous
+                ne publiez pas
+              </p>
             </FadeIn>
           </div>
           <FadeIn delay={0.1} className="hidden justify-center lg:flex">
@@ -162,321 +180,367 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Problème */}
-      <section id="concept" className="mx-auto max-w-5xl px-4 py-20">
-        <FadeIn>
-          <h2 className="text-center text-3xl font-extrabold tracking-tight">
-            Sur Google, on ne vous trouve pas encore
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-zinc-600">
-            Vos clients habituels vous écrivent déjà sur WhatsApp, et
-            c&apos;est très bien. Mais ceux qui ne vous connaissent pas
-            cherchent sur Google.
-          </p>
-        </FadeIn>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <FadeIn delay={0.05}>
-            <div className="h-full rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-                <MessageCircle className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 text-lg font-bold">Vos clients habituels</h3>
-              <p className="mt-2 text-zinc-600">
-                Ils vous écrivent déjà sur WhatsApp. Rien ne change pour eux.
-              </p>
+      {/* 2. Bande de preuve */}
+      <section className="border-y border-emerald-950/10 bg-emerald-950 px-4 py-3 text-white">
+        <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-xs font-semibold sm:text-sm">
+          {PREUVES.map((p) => (
+            <li key={p} className="flex items-center gap-1.5 text-emerald-50/90">
+              <Check className="h-4 w-4 shrink-0 text-amber-300" />
+              {p}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* 3. Démo — visible aussi sur téléphone */}
+      <section id="demo" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <FadeIn>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              Regardez-la comme votre client la verra
+            </h2>
+            <p className="mt-3 text-zinc-600">
+              Il ouvre votre boutique sur son téléphone, voit la carte et les
+              prix, remplit son panier. La validation ouvre WhatsApp avec le
+              récapitulatif déjà écrit.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/demo"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
+              >
+                Ouvrir la démo
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <a
+                href={LIEN_CREER}
+                className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-50"
+              >
+                Créer la mienne
+              </a>
             </div>
+            <p className="mt-3 text-sm text-zinc-500">
+              C&apos;est une vraie boutique de l&apos;application, pas une
+              maquette.
+            </p>
           </FadeIn>
-          <FadeIn delay={0.1}>
-            <div className="h-full rounded-3xl bg-white p-6 shadow-sm ring-1 ring-black/5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
-                <Search className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 text-lg font-bold">Les nouveaux clients</h3>
-              <p className="mt-2 text-zinc-600">
-                Ils passent par Google ou Maps. Sans site, ils ne vous trouvent
-                pas et vont chez un concurrent.
-              </p>
-            </div>
+          <FadeIn delay={0.1} className="flex justify-center">
+            <BoutiqueApercu />
           </FadeIn>
         </div>
       </section>
 
-      {/* Solution */}
-      <section className="bg-white px-4 py-20">
+      {/* 4. Avis Google — texte exact, nom tel qu'affiché, nombre d'avis visible */}
+      <section className="border-t border-black/5 bg-white px-4 py-14">
+        <div className="mx-auto max-w-3xl">
+          <FadeIn>
+            <h2 className="text-center text-2xl font-extrabold tracking-tight">
+              Ce qu&apos;ils en disent
+            </h2>
+            <div className="mt-3 flex items-center justify-center gap-2 text-sm">
+              <Stars />
+              <span className="font-bold text-zinc-900">{NOTE_GOOGLE}</span>
+              <span className="text-zinc-500">· {NB_AVIS} avis Google</span>
+            </div>
+          </FadeIn>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <FadeIn>
+              <blockquote className="h-full rounded-2xl bg-cream p-5 ring-1 ring-black/5">
+                <Stars small />
+                <p className="mt-2 text-zinc-800">
+                  « Très pratique pour les clients de mon restaurant ! »
+                </p>
+                <footer className="mt-2 text-sm font-semibold text-zinc-500">
+                  Adrien Pennec
+                </footer>
+              </blockquote>
+            </FadeIn>
+            <FadeIn delay={0.05}>
+              <blockquote className="h-full rounded-2xl bg-cream p-5 ring-1 ring-black/5">
+                <Stars small />
+                <p className="mt-2 text-zinc-800">
+                  « Absolument génial je recommande ! »
+                </p>
+                <footer className="mt-2 text-sm font-semibold text-zinc-500">
+                  Rym Elb
+                </footer>
+              </blockquote>
+            </FadeIn>
+          </div>
+          <FadeIn>
+            <p className="mt-4 text-center text-sm">
+              <a
+                href={AVIS_GOOGLE}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-emerald-800 underline underline-offset-4"
+              >
+                Voir les avis sur Google
+              </a>
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* 5. Problème : avant / après */}
+      <section id="probleme" className="mx-auto max-w-4xl px-4 py-16 sm:py-20">
+        <FadeIn>
+          <h2 className="text-center text-3xl font-extrabold tracking-tight">
+            Une commande WhatsApp, ça vous prend combien de temps ?
+          </h2>
+        </FadeIn>
+        <FadeIn delay={0.05}>
+          <div className="mt-8 overflow-hidden rounded-3xl bg-white ring-1 ring-black/5">
+            <div className="hidden gap-4 border-b border-black/5 bg-cream px-5 py-3 text-xs font-bold uppercase tracking-wide text-zinc-500 sm:grid sm:grid-cols-2">
+              <span>Aujourd&apos;hui</span>
+              <span className="text-emerald-800">Avec Ti-Boutik</span>
+            </div>
+            {AVANT_APRES.map(([avant, apres], i) => (
+              <div
+                key={avant}
+                className={`px-5 py-4 ${
+                  i > 0 ? "border-t border-black/5" : ""
+                } sm:grid sm:grid-cols-2 sm:gap-4`}
+              >
+                <p className="text-sm text-zinc-500">{avant}</p>
+                <p className="mt-1.5 flex gap-2 text-sm font-medium text-zinc-900 sm:mt-0">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 sm:hidden" />
+                  {apres}
+                </p>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+        <FadeIn delay={0.1}>
+          <p className="mt-5 text-center text-base font-semibold text-emerald-900">
+            Rien ne change pour vos habitudes : les commandes continuent
+            d&apos;arriver dans votre WhatsApp.
+          </p>
+        </FadeIn>
+      </section>
+
+      {/* 6. Fonctions : trois blocs + « et aussi » */}
+      <section className="bg-white px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-5xl">
           <FadeIn>
             <h2 className="text-center text-3xl font-extrabold tracking-tight">
-              Un site sur mesure, trouvable sur Google
+              Trois choses, faites pour de vrai
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-center text-zinc-600">
-              Votre vitrine en ligne, avec vos habitudes WhatsApp intactes.
+          </FadeIn>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {FONCTIONS.map((f, i) => (
+              <FadeIn key={f.titre} delay={i * 0.05}>
+                <div className="h-full rounded-3xl bg-cream p-6 ring-1 ring-black/5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                    {f.icon}
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold">{f.titre}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-600">
+                    {f.texte}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn delay={0.1}>
+            <p className="mx-auto mt-8 max-w-3xl text-center text-sm text-zinc-500">
+              <span className="font-bold text-zinc-700">Et aussi :</span>{" "}
+              {ET_AUSSI.join(" · ")}
             </p>
           </FadeIn>
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            <Pillar
-              delay={0}
-              icon={<Globe className="h-6 w-6" />}
-              title="Votre site sur mesure"
-              color="text-emerald-700 bg-emerald-100"
-              text="Un design unique, une page unique, à votre domaine — avec vos photos et vos prix."
-            />
-            <Pillar
-              delay={0.06}
-              icon={<Search className="h-6 w-6" />}
-              title="Trouvable sur Google"
-              color="text-amber-700 bg-amber-100"
-              text="Votre site est référencé : les gens qui vous cherchent vous trouvent."
-            />
-            <Pillar
-              delay={0.12}
-              icon={<MessageCircle className="h-6 w-6" />}
-              title="Guidés vers WhatsApp"
-              color="text-green-700 bg-green-100"
-              text="Le client remplit son panier, puis le contact et le paiement se font sur WhatsApp."
-            />
-          </div>
         </div>
       </section>
 
-      {/* Modularité */}
-      <section id="metiers" className="mx-auto max-w-6xl px-4 py-20">
+      {/* 7. Trois étapes */}
+      <section id="comment" className="mx-auto max-w-4xl px-4 py-16 sm:py-20">
         <FadeIn>
           <h2 className="text-center text-3xl font-extrabold tracking-tight">
-            Un site pour chaque métier
+            Trois étapes, dix minutes
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-zinc-600">
-            Le même socle, adapté à votre activité. Catalogue, options,
-            réservation ou commande, paiement carte ou espèces : tout se
-            configure selon votre métier.
-          </p>
         </FadeIn>
-
-        <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
-          <FadeIn className="flex justify-center">
-            <CommerceShowcase />
-          </FadeIn>
-          <div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {METIERS.map((m, i) => (
-                <FadeIn key={m.label} delay={i * 0.03}>
-                  <div className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 shadow-sm ring-1 ring-black/5">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                      {m.icon}
-                    </div>
-                    <span className="text-sm font-semibold text-zinc-700">
-                      {m.label}
-                    </span>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-            <FadeIn delay={0.1}>
-              <p className="mt-6 rounded-2xl bg-emerald-50 px-5 py-4 text-sm text-emerald-900 ring-1 ring-emerald-100">
-                <span className="font-bold">Et bien d&apos;autres.</span> Si
-                votre activité se commande ou se réserve, elle a sa place ici.
-              </p>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* Référencement */}
-      <section id="referencement" className="bg-emerald-900 px-4 py-20 text-white">
-        <div className="mx-auto max-w-6xl">
-          <FadeIn>
-            <h2 className="text-center text-3xl font-extrabold tracking-tight">
-              Trouvable partout en Guadeloupe &amp; aux Antilles
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-center text-emerald-50/80">
-              Votre site n&apos;est pas qu&apos;une jolie vitrine : il est fait
-              pour apparaître dans les recherches locales, partout en
-              Guadeloupe et aux Antilles.
-            </p>
-          </FadeIn>
-
-          <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {SEO_POINTS.map((p, i) => (
-                <FadeIn key={p.title} delay={i * 0.05}>
-                  <div className="h-full rounded-3xl bg-white/10 p-6 backdrop-blur">
-                    <h3 className="text-lg font-bold text-amber-300">
-                      {p.title}
-                    </h3>
-                    <p className="mt-2 text-emerald-50/90">{p.text}</p>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-            <FadeIn className="flex justify-center">
-              <SearchDemo />
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
-      {/* Comment ça marche */}
-      <section id="comment" className="mx-auto max-w-5xl px-4 py-20">
-        <FadeIn>
-          <h2 className="text-center text-3xl font-extrabold tracking-tight">
-            Comment ça marche
-          </h2>
-          <p className="mt-3 text-center text-zinc-600">
-            De la prise de contact à votre premier paiement en ligne.
-          </p>
-        </FadeIn>
-
-        <FadeIn>
-          <div className="mt-12 rounded-3xl bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 p-6 text-white sm:p-10">
-            <h3 className="text-center text-xl font-bold">
-              Le parcours client
-            </h3>
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              <ClientStep
-                n={1}
-                title="Il visite votre site"
-                text="Il découvre votre catalogue, vos photos et vos prix."
-              />
-              <ClientStep
-                n={2}
-                title="Il remplit son panier"
-                text="Il choisit ses produits et son mode de paiement : carte ou espèces."
-              />
-              <ClientStep
-                n={3}
-                title="La validation ouvre WhatsApp"
-                text="Un message récapitulatif est prêt, il l'envoie en un clic."
-              />
-              <ClientStep
-                n={4}
-                title="Vous acceptez, il paie"
-                text="Vous confirmez la commande, le client règle via le lien."
-              />
-            </div>
-            <div className="mt-8 flex flex-col items-center gap-2">
-              <Link
-                href="/demo"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50"
-              >
-                Voir la démo interactive
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <span className="text-sm text-emerald-100/80">
-                Démo pour un restaurant · O&apos;Boucané — Resto
-              </span>
-            </div>
-          </div>
-        </FadeIn>
-
-        <div className="mt-12 space-y-4">
-          <Step
+        <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          <Etape
             n={1}
-            title="Prenez contact avec moi"
-            text="Un simple message WhatsApp ou un appel : on parle de votre activité et de vos besoins."
+            titre="Vous créez votre compte"
+            texte="Un e-mail, un mot de passe, le nom de votre commerce. Votre boutique naît en privé."
           />
-          <Step
+          <Etape
             n={2}
-            title="Je crée votre site sur mesure"
-            text="Une page unique, design sur mesure, à votre domaine — avec vos photos, vos prix et vos couleurs."
+            titre="Vous remplissez votre carte"
+            texte="Vos plats, vos prix, vos photos, vos horaires — depuis votre téléphone."
           />
-          <Step
+          <Etape
             n={3}
-            title="Votre catalogue en ligne"
-            text="Vos produits, prix et disponibilités sont gérés simplement : vous gardez la main, sans back-office compliqué."
-          />
-          <Step
-            n={4}
-            title="On active les paiements"
-            text="Carte bancaire, PayPal, Apple Pay et Google Pay via Stripe. Votre compte est prêt en quelques minutes."
-          />
-          <Step
-            n={5}
-            title="Donnez votre WhatsApp"
-            text="Vos commandes arrivent directement dans votre conversation, avec le récapitulatif et le lien de paiement."
-          />
-          <Step
-            n={6}
-            title="Encaisser sans quitter WhatsApp"
-            text="Le client paie par carte, PayPal, Apple Pay, Google Pay ou en espèces. Vous confirmez, c'est tout."
-            last
+            titre="Vous publiez"
+            texte={`${PRIX} par mois à ce moment-là, pas avant. Votre boutique ouvre à votre adresse.`}
           />
         </div>
       </section>
 
-      {/* Paiement */}
-      <section className="mx-auto max-w-5xl px-4 py-20">
-        <FadeIn>
-          <h2 className="text-center text-3xl font-extrabold tracking-tight">
-            Le paiement en ligne, sans terminal
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-center text-zinc-600">
-            Vos clients règlent en ligne, depuis votre site, où qu&apos;ils
-            soient. L&apos;argent arrive directement sur votre compte bancaire.
-          </p>
-        </FadeIn>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <PayMethod
-            icon={<CreditCard className="h-7 w-7 text-zinc-700" />}
-            label="Carte en ligne"
-          />
-          <PayMethod
-            icon={<ApplePayIcon className="h-6 w-6 text-black" />}
-            label="Apple Pay"
-          />
-          <PayMethod
-            icon={<GooglePayIcon className="h-6 w-6 text-[#4285F4]" />}
-            label="Google Pay"
-          />
-          <PayMethod
-            icon={<PayPalIcon className="h-6 w-6 text-[#003087]" />}
-            label="PayPal"
-          />
-        </div>
-        <FadeIn>
-          <div className="mx-auto mt-6 flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-zinc-600 ring-1 ring-black/5">
-            <Banknote className="h-5 w-5 text-emerald-600" />
-            Et toujours les espèces à la réception, si le client préfère.
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="bg-white px-4 py-20">
-        <div className="mx-auto max-w-3xl">
+      {/* 8. Objections */}
+      <section className="bg-white px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl">
           <FadeIn>
             <h2 className="text-center text-3xl font-extrabold tracking-tight">
-              Questions fréquentes
+              Vous vous dites peut-être…
             </h2>
-            <p className="mt-3 text-center text-zinc-600">
-              Tout ce que vous devez savoir avant de vous lancer.
-            </p>
           </FadeIn>
-          <div className="mt-10 space-y-3">
-            {FAQ_ITEMS.map((item, i) => (
-              <FadeIn key={item.q} delay={i * 0.03}>
-                <FaqItem q={item.q} a={item.a} />
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {OBJECTIONS.map((o, i) => (
+              <FadeIn key={o.titre} delay={i * 0.05}>
+                <div className="h-full rounded-3xl bg-cream p-6 ring-1 ring-black/5">
+                  <p className="font-bold text-zinc-900">{o.titre}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-600">
+                    {o.texte}
+                  </p>
+                </div>
               </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA final */}
+      {/* 9. Prix + retour sur investissement */}
+      <section id="tarif" className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
+        <FadeIn>
+          <h2 className="text-center text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+            {PRIX}/mois. Trois commandes de plus,
+            <br className="hidden sm:block" /> et c&apos;est remboursé.
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-zinc-600">
+            Exemple : à 15 € le panier, trois commandes de plus dans le mois
+            couvrent l&apos;abonnement. Le reste, c&apos;est pour vous.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.05}>
+          <div className="mt-8 rounded-3xl bg-gradient-to-br from-emerald-900 to-teal-900 p-7 text-white shadow-xl">
+            <p className="text-4xl font-extrabold">
+              0 €
+              <span className="text-lg font-semibold text-emerald-100/80">
+                {" "}pour créer
+              </span>
+            </p>
+            <p className="mt-1 text-sm text-emerald-100/80">
+              puis {PRIX} / mois pour publier · sans engagement, résiliable en un
+              clic
+            </p>
+            <ul className="mt-5 space-y-2 text-sm text-emerald-50/95">
+              {[
+                "Votre boutique à votre adresse",
+                "Carte, options, stock, photos illimités",
+                "Commandes WhatsApp avec référence",
+                "Carte, Apple Pay, Google Pay, PayPal",
+                "Horaires, fermetures, créneaux de retrait",
+                "Référencement Google",
+              ].map((l) => (
+                <li key={l} className="flex gap-2">
+                  <Check className="h-4 w-4 shrink-0 text-amber-300" />
+                  {l}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={LIEN_CREER}
+              className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-base font-bold text-emerald-800 transition hover:bg-emerald-50"
+            >
+              Créer ma boutique
+              <ArrowRight className="h-5 w-5" />
+            </a>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <p className="mt-5 text-center text-sm text-zinc-600">
+            Vous préférez déléguer ? Je crée la boutique pour vous, sur devis.{" "}
+            <a
+              href={CONTACT_WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-emerald-800 underline underline-offset-4"
+            >
+              Écrivez-moi
+            </a>
+          </p>
+        </FadeIn>
+      </section>
+
+      {/* 10. Qui est derrière */}
+      <section className="bg-white px-4 py-16">
+        <FadeIn>
+          <div className="mx-auto flex max-w-3xl flex-col gap-5 sm:flex-row sm:items-start">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-emerald-900 text-xl font-extrabold text-amber-300">
+              K
+            </div>
+            <div>
+              <h2 className="text-xl font-extrabold tracking-tight">
+                Qui est derrière Ti-Boutik
+              </h2>
+              <p className="mt-2 text-zinc-600">
+                Je m&apos;appelle Killian, je développe des sites pour des
+                commerces guadeloupéens. Ti-Boutik, c&apos;est mon outil : je le
+                fais tourner, je réponds moi-même sur WhatsApp, et je corrige ce
+                qui bloque.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-500">
+                Avant Ti-Boutik, j&apos;ai fait{" "}
+                <a
+                  href="https://tablemaster.fr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-emerald-800 underline underline-offset-4"
+                >
+                  tablemaster.fr
+                </a>{" "}
+                — un logiciel de réservation pour les restaurants, sans commission
+                sur les couverts. Et je termine la première boutique Ti-Boutik
+                d&apos;un restaurant, qui ouvre dans quelques jours.
+              </p>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* 11. FAQ */}
+      <section id="faq" className="mx-auto max-w-2xl px-4 py-16 sm:py-20">
+        <FadeIn>
+          <h2 className="text-center text-3xl font-extrabold tracking-tight">
+            Questions fréquentes
+          </h2>
+        </FadeIn>
+        <div className="mt-8 space-y-3">
+          {FAQ_ITEMS.map((item, i) => (
+            <FadeIn key={item.q} delay={i * 0.03}>
+              <FaqItem q={item.q} a={item.a} />
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* 12. CTA final */}
       <section
         id="contact"
-        className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 py-20 text-white"
+        className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 py-16 text-white sm:py-20"
       >
         <div className="mx-auto max-w-2xl text-center">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Prêt à digitaliser votre commerce ?
+              Vous ne payez que le jour où vous la publiez.
             </h2>
             <p className="mt-4 text-emerald-50/90">
-              Un message suffit pour démarrer. On en parle, et je m&apos;occupe
-              du reste.
+              Créez votre boutique maintenant, remplissez-la tranquillement. Si
+              une question bloque, écrivez-moi — je réponds moi-même.
             </p>
           </FadeIn>
           <FadeIn delay={0.1}>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href={LIEN_CREER}
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:w-auto"
+              >
+                Créer ma boutique
+                <ArrowRight className="h-5 w-5" />
+              </a>
               <a
                 href={CONTACT_WHATSAPP}
                 target="_blank"
@@ -484,32 +548,149 @@ export default function Landing() {
                 className="flex w-full items-center justify-center gap-2 rounded-2xl bg-wa px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-green-600/30 transition hover:brightness-105 sm:w-auto"
               >
                 <WhatsAppIcon className="h-5 w-5" />
-                Discutons-en sur WhatsApp
-              </a>
-              <a
-                href={CONTACT_EMAIL}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/10 px-6 py-3.5 text-base font-bold text-white backdrop-blur transition hover:bg-white/20 sm:w-auto"
-              >
-                Par email
+                Discutons-en
               </a>
             </div>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <p className="mt-5 text-sm text-emerald-100/70">
+              WhatsApp{" "}
+              <a
+                href={CONTACT_WHATSAPP}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="tabular-nums underline underline-offset-2 transition hover:text-white"
+              >
+                {CONTACT_TEL}
+              </a>{" "}
+              ·{" "}
+              <a
+                href={CONTACT_EMAIL}
+                className="underline underline-offset-2 transition hover:text-white"
+              >
+                {CONTACT_ADRESSE}
+              </a>
+            </p>
           </FadeIn>
         </div>
       </section>
 
       <footer className="bg-emerald-950 px-4 py-8 pb-24 text-sm text-emerald-200/60 md:pb-8">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-2 sm:flex-row">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-3 sm:flex-row">
           <p>© 2026 Ti-Boutik — Tous droits réservés.</p>
-          <Link
-            href="/mentions-legales"
-            className="transition hover:text-white"
-          >
-            Mentions légales
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <a href={LIEN_CONNEXION} className="transition hover:text-white">
+              Espace commerçant
+            </a>
+            <a
+              href={CONTACT_WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="tabular-nums transition hover:text-white"
+            >
+              {CONTACT_TEL}
+            </a>
+            <a href={CONTACT_EMAIL} className="transition hover:text-white">
+              {CONTACT_ADRESSE}
+            </a>
+            <Link href="/cgv" className="transition hover:text-white">
+              CGV
+            </Link>
+            <Link href="/mentions-legales" className="transition hover:text-white">
+              Mentions légales
+            </Link>
+          </div>
         </div>
       </footer>
 
       <MobileContactBar />
+    </div>
+  );
+}
+
+function Stars({ small = false }: { small?: boolean }) {
+  const taille = small ? "h-3.5 w-3.5" : "h-4 w-4";
+  return (
+    <span className="flex items-center gap-0.5" aria-label="5 étoiles sur 5">
+      {[0, 1, 2, 3, 4].map((i) => (
+        <Star key={i} className={`${taille} fill-amber-400 text-amber-400`} />
+      ))}
+    </span>
+  );
+}
+
+function Etape({ n, titre, texte }: { n: number; titre: string; texte: string }) {
+  return (
+    <FadeIn>
+      <div className="h-full rounded-3xl bg-white p-6 ring-1 ring-black/5">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-700 text-sm font-bold text-white">
+          {n}
+        </span>
+        <h3 className="mt-3 text-base font-bold">{titre}</h3>
+        <p className="mt-1 text-sm leading-relaxed text-zinc-600">{texte}</p>
+      </div>
+    </FadeIn>
+  );
+}
+
+/* Aperçu de boutique : un restaurant, le seul métier ouvert aujourd'hui. */
+function BoutiqueApercu() {
+  const plats = [
+    { nom: "Poulet boucané", detail: "Riz, haricots, sauce chien", prix: "12 €" },
+    { nom: "Accras de morue", detail: "6 pièces", prix: "5 €" },
+    { nom: "Jus de goyave", detail: "33 cl, fait maison", prix: "3,50 €" },
+  ];
+
+  return (
+    <div className="w-full max-w-[300px] rounded-[2.4rem] border-[10px] border-zinc-900 bg-cream shadow-2xl">
+      <div className="overflow-hidden rounded-[1.7rem]">
+        <div className="flex items-center gap-2 bg-white px-4 py-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-emerald-600 to-amber-500 text-xs font-bold text-white">
+            C
+          </div>
+          <div className="min-w-0 leading-tight">
+            <p className="truncate text-xs font-bold">Chez Léa</p>
+            <p className="text-[10px] text-zinc-500">Resto créole · Le Gosier</p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-emerald-700 to-teal-600 px-4 py-4 text-white">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-amber-200">
+            Ouvert · jusqu&apos;à 14 h
+          </p>
+          <p className="mt-1 text-sm font-bold leading-snug">
+            Commandez en ligne, retirez au comptoir.
+          </p>
+        </div>
+
+        <div className="space-y-2 p-3">
+          {plats.map((p) => (
+            <div
+              key={p.nom}
+              className="flex items-start justify-between gap-2 rounded-2xl bg-white px-3 py-2.5 shadow-sm ring-1 ring-black/5"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-xs font-bold">{p.nom}</p>
+                <p className="truncate text-[10px] text-zinc-500">{p.detail}</p>
+              </div>
+              <span className="shrink-0 text-xs font-bold text-emerald-800">
+                {p.prix}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="px-3 pb-4">
+          <div className="flex items-center justify-between rounded-2xl bg-white px-3 py-2.5 text-[11px] font-semibold ring-1 ring-black/5">
+            <span className="text-zinc-600">2 articles</span>
+            <span className="text-emerald-800">17 €</span>
+          </div>
+          <div className="mt-2 flex items-center justify-center gap-2 rounded-2xl bg-wa px-3 py-3 text-xs font-bold text-white">
+            <WhatsAppIcon className="h-4 w-4" />
+            Commander sur WhatsApp
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -546,16 +727,22 @@ function MobileContactBar() {
       initial={{ y: "120%", opacity: 0 }}
       animate={{ y: visible ? 0 : "120%", opacity: visible ? 1 : 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed inset-x-0 bottom-0 z-50 p-3 md:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 flex gap-2 p-3 md:hidden"
     >
+      <a
+        href={LIEN_CREER}
+        className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white py-4 text-base font-bold text-emerald-800 shadow-lg transition"
+      >
+        Créer ma boutique
+      </a>
       <a
         href={CONTACT_WHATSAPP}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-wa py-4 text-base font-bold text-white shadow-lg shadow-green-600/40 transition hover:brightness-105"
+        aria-label="Écrire sur WhatsApp"
+        className="flex items-center justify-center rounded-2xl bg-wa px-4 shadow-lg shadow-green-600/40 transition"
       >
-        <WhatsAppIcon className="h-5 w-5" />
-        Prendre contact sur WhatsApp
+        <WhatsAppIcon className="h-6 w-6 text-white" />
       </a>
     </motion.div>
   );
@@ -564,7 +751,7 @@ function MobileContactBar() {
 function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/5 bg-emerald-900/80 backdrop-blur-md">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
         <Link href="/" className="flex items-center gap-2.5 text-white">
           <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-xl">
             <Image
@@ -575,135 +762,45 @@ function Header() {
               className="h-full w-full object-contain"
             />
           </span>
-          <span className="text-base font-bold tracking-tight">
-            Ti-Boutik
-          </span>
+          <span className="text-base font-bold tracking-tight">Ti-Boutik</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-emerald-100/80 lg:flex">
-          <a href="#metiers" className="transition hover:text-white">
-            Métiers
-          </a>
-          <a href="#referencement" className="transition hover:text-white">
-            Référencement
+          <a href="#demo" className="transition hover:text-white">
+            Démo
           </a>
           <a href="#comment" className="transition hover:text-white">
             Comment ça marche
           </a>
+          <a href="#tarif" className="transition hover:text-white">
+            Prix
+          </a>
           <a href="#faq" className="transition hover:text-white">
             FAQ
           </a>
-          <a href="#contact" className="transition hover:text-white">
-            Contact
-          </a>
         </nav>
-        <Link
-          href="/demo"
-          className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-emerald-800 transition hover:bg-emerald-50"
-        >
-          Voir la démo
-        </Link>
+        <div className="flex items-center gap-2">
+          <a
+            href={LIEN_CONNEXION}
+            className="hidden rounded-xl px-3 py-2 text-sm font-semibold text-emerald-100/80 transition hover:text-white sm:block"
+          >
+            Se connecter
+          </a>
+          <a
+            href={LIEN_CREER}
+            className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-emerald-800 transition hover:bg-emerald-50"
+          >
+            Créer ma boutique
+          </a>
+        </div>
       </div>
     </header>
   );
 }
 
-function Pillar({
-  icon,
-  title,
-  text,
-  color,
-  delay,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  text: string;
-  color: string;
-  delay: number;
-}) {
-  return (
-    <FadeIn delay={delay}>
-      <div className="h-full rounded-3xl bg-cream p-6 ring-1 ring-black/5">
-        <div
-          className={`flex h-12 w-12 items-center justify-center rounded-2xl ${color}`}
-        >
-          {icon}
-        </div>
-        <h3 className="mt-4 text-lg font-bold">{title}</h3>
-        <p className="mt-2 text-zinc-600">{text}</p>
-      </div>
-    </FadeIn>
-  );
-}
-
-function PayMethod({
-  icon,
-  label,
-}: {
-  icon: React.ReactNode;
-  label: string;
-}) {
-  return (
-    <FadeIn>
-      <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl bg-white px-4 py-6 shadow-sm ring-1 ring-black/5">
-        <div className="flex h-12 items-center justify-center">{icon}</div>
-        <span className="text-sm font-semibold text-zinc-700">{label}</span>
-      </div>
-    </FadeIn>
-  );
-}
-
-function Step({
-  n,
-  title,
-  text,
-  last,
-}: {
-  n: number;
-  title: string;
-  text: string;
-  last?: boolean;
-}) {
-  return (
-    <FadeIn>
-      <div className="flex gap-4">
-        <div className="flex flex-col items-center">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white shadow-sm">
-            {n}
-          </div>
-          {!last && <div className="mt-2 w-px flex-1 bg-black/10" />}
-        </div>
-        <div className="pb-8">
-          <h3 className="text-lg font-bold">{title}</h3>
-          <p className="mt-1 text-zinc-600">{text}</p>
-        </div>
-      </div>
-    </FadeIn>
-  );
-}
-
-function ClientStep({
-  n,
-  title,
-  text,
-}: {
-  n: number;
-  title: string;
-  text: string;
-}) {
-  return (
-    <div className="rounded-2xl bg-white/10 p-5 backdrop-blur">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-400 text-sm font-bold text-emerald-950">
-        {n}
-      </div>
-      <h4 className="mt-3 text-base font-bold">{title}</h4>
-      <p className="mt-1.5 text-sm text-emerald-50/85">{text}</p>
-    </div>
-  );
-}
-
 function FaqItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);  return (
-    <div className="overflow-hidden rounded-2xl bg-cream ring-1 ring-black/5">
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/5">
       <button
         onClick={() => setOpen((o) => !o)}
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"

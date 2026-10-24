@@ -20,10 +20,10 @@ import {
 } from "@/lib/menu";
 import { PhoneFrame, StatusBar, ChatHeader, ChatInput } from "@/components/phone";
 import {
+  StripeIcon,
   ApplePayIcon,
   GooglePayIcon,
   PayPalIcon,
-  StripeIcon,
 } from "@/components/icons";
 
 type WhatsAppSimProps = {

@@ -3,7 +3,7 @@ export const SITE_NAME = "Ti-Boutik";
 export const SITE_TITLE =
   "Ti-Boutik — Site e-commerce & commandes WhatsApp en Guadeloupe";
 export const SITE_DESCRIPTION =
-  "Ti-Boutik crée votre site e-commerce sur mesure en Guadeloupe et aux Antilles : catalogue en ligne, commandes et paiement (carte, Apple Pay, Google Pay, PayPal) directement sur WhatsApp. Restaurants, location, excursions, boutiques, artisans.";
+  "Boutique en ligne pour restaurants, snacks et traiteurs en Guadeloupe : les commandes arrivent déjà rédigées sur WhatsApp. 0 € pour créer, 39 €/mois pour publier, sans engagement.";
 
 export const SITE_KEYWORDS = [
   "site e-commerce Guadeloupe",
