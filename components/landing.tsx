@@ -469,6 +469,69 @@ export default function Landing() {
         </FadeIn>
       </section>
 
+      {/* 9 bis. L'assistant IA — petit bloc, bien visible */}
+      <section
+        id="assistant"
+        className="border-y border-emerald-950/10 bg-[#f6f3ec] px-4 py-14"
+      >
+        <FadeIn>
+          <div className="mx-auto max-w-3xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-800 px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-white">
+              Nouveau · option
+            </span>
+            <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
+              Un assistant qui fait le travail dans votre boutique
+            </h2>
+            <p className="mt-3 text-zinc-600">
+              Vous lui dites « ajoute le plat du jour », « change le prix du bokit »,
+              « mets cette photo sur le poulet » — et c&apos;est fait, dans votre
+              boutique, avec votre accord. Pas de menu à chercher, pas de formulaire :
+              vous parlez, il agit.
+            </p>
+            <ul className="mt-5 grid gap-2.5 text-[14.5px] text-zinc-700 sm:grid-cols-2">
+              {[
+                "Ajoute vos plats, boissons, options",
+                "Change vos prix, vos textes, vos photos",
+                "Vous dit ce que vous avez vendu aujourd'hui",
+                "Chaque changement est confirmé puis tracé",
+              ].map((l) => (
+                <li key={l} className="flex gap-2">
+                  <Check className="h-4 w-4 shrink-0 text-emerald-700" />
+                  {l}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-col gap-3 rounded-2xl bg-white p-4 ring-1 ring-black/5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-[15px] font-bold">
+                  10 €/mois{" "}
+                  <span className="font-semibold text-zinc-500">
+                    ou 90 €/an — trois mois offerts
+                  </span>
+                </p>
+                <p className="mt-1 text-[12.5px] text-zinc-500">
+                  Offert deux mois avec l&apos;abonnement annuel de la boutique.
+                  Assistant automatisé : lisez les{" "}
+                  <Link
+                    href="/assistant/conditions"
+                    className="font-semibold text-emerald-800 underline underline-offset-4"
+                  >
+                    conditions d&apos;utilisation
+                  </Link>
+                  .
+                </p>
+              </div>
+              <a
+                href={LIEN_CREER}
+                className="shrink-0 rounded-xl bg-emerald-800 px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-emerald-900"
+              >
+                Créer ma boutique
+              </a>
+            </div>
+          </div>
+        </FadeIn>
+      </section>
+
       {/* 10. Qui est derrière */}
       <section className="bg-white px-4 py-16">
         <FadeIn>
