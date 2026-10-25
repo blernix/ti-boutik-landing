@@ -91,7 +91,7 @@ const OBJECTIONS = [
 const FAQ_ITEMS = [
   {
     q: "Combien ça coûte ?",
-    a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, comme sur tout paiement par carte.",
+    a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez — ou 390 € par an, deux mois offerts. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, comme sur tout paiement par carte.",
   },
   {
     q: "Combien de temps pour être en ligne ?",
@@ -424,6 +424,10 @@ export default function Landing() {
             <p className="mt-1 text-sm text-emerald-100/80">
               puis {PRIX} / mois pour publier · sans engagement, résiliable en un
               clic
+            </p>
+            <p className="mt-2 inline-flex items-baseline gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[13px] text-emerald-50">
+              ou <strong className="font-semibold text-white">390 € par an</strong>
+              <span className="text-emerald-100/70">— deux mois offerts</span>
             </p>
             <ul className="mt-5 space-y-2 text-sm text-emerald-50/95">
               {[

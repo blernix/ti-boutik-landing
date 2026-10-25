@@ -101,11 +101,13 @@ export default function CGV() {
               l&apos;abonnement.
             </p>
             <p className="mt-3">
-              L&apos;abonnement est de <strong>39 € par mois</strong>, montant
-              total prélevé, toutes taxes comprises. Il est mensuel, sans
-              engagement de durée, et se renouvelle automatiquement à chaque
-              échéance jusqu&apos;à résiliation. Une facture est disponible dans
-              votre espace. Ti-Boutik ne prélève aucune commission sur vos ventes.
+              Deux formules, au choix au moment de la publication :{" "}
+              <strong>39 € par mois</strong> ou <strong>390 € par an</strong>
+              (deux mois offerts), montant total prélevé, toutes taxes comprises.
+              Sans engagement de durée, elles se renouvellent automatiquement à
+              chaque échéance jusqu&apos;à résiliation. Une facture est disponible
+              dans votre espace. Ti-Boutik ne prélève aucune commission sur vos
+              ventes.
             </p>
             <p className="mt-3">
               Le paiement est effectué par carte bancaire auprès de notre
