@@ -102,8 +102,8 @@ export default function CGV() {
             </p>
             <p className="mt-3">
               Deux formules, au choix au moment de la publication :{" "}
-              <strong>39 € par mois</strong> ou <strong>351 € par an</strong>
-              (trois mois offerts), montant total prélevé, toutes taxes comprises.
+              <strong>39 € par mois</strong> ou <strong>390 € par an</strong>
+              (deux mois offerts), montant total prélevé, toutes taxes comprises.
               Sans engagement de durée, elles se renouvellent automatiquement à
               chaque échéance jusqu&apos;à résiliation. Une facture est disponible
               dans votre espace. Ti-Boutik ne prélève aucune commission sur vos
