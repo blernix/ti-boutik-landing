@@ -132,6 +132,26 @@ export default function CGV() {
               commandable, sans suppression de vos données. L&apos;accès est
               rétabli au règlement.
             </p>
+            <p className="mt-3">
+              L&apos;option <strong>Assistant Boutik</strong> est un abonnement
+              distinct : <strong>10 € par mois</strong> ou{" "}
+              <strong>90 € par an</strong> (trois mois offerts), ou offerte
+              pendant deux mois avec la formule annuelle de publication. Elle
+              repose sur un modèle d&apos;intelligence artificielle externe
+              (DeepSeek) : les messages écrits dans la conversation et les
+              éléments de votre boutique nécessaires à la demande lui sont
+              transmis, hors de l&apos;Union européenne. Les gestes sensibles
+              restent soumis à votre confirmation et vous restez responsable du
+              contenu publié. Ces conditions propres à l&apos;option sont
+              détaillées ici :{" "}
+              <a
+                href="https://app.ti-boutik.fr/assistant/conditions"
+                className="underline underline-offset-2"
+              >
+                conditions d&apos;utilisation de l&apos;assistant
+              </a>
+              .
+            </p>
           </section>
 
           <section>
