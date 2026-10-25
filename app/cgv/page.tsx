@@ -27,7 +27,7 @@ export default function CGV() {
           Conditions générales de vente
         </h1>
         <p className="mt-2 text-sm text-zinc-500">
-          Version du 23 octobre 2026 — elles s&apos;appliquent à tout abonnement
+          Version du 26 octobre 2026 — elles s&apos;appliquent à tout abonnement
           souscrit sur ti-boutik.fr.
         </p>
 
@@ -102,12 +102,23 @@ export default function CGV() {
             </p>
             <p className="mt-3">
               Deux formules, au choix au moment de la publication :{" "}
-              <strong>39 € par mois</strong> ou <strong>390 € par an</strong>
-              (deux mois offerts), montant total prélevé, toutes taxes comprises.
+              <strong>39 € par mois</strong> ou <strong>351 € par an</strong>
+              (trois mois offerts), montant total prélevé, toutes taxes comprises.
               Sans engagement de durée, elles se renouvellent automatiquement à
               chaque échéance jusqu&apos;à résiliation. Une facture est disponible
               dans votre espace. Ti-Boutik ne prélève aucune commission sur vos
               ventes.
+            </p>
+            <p className="mt-3">
+              <strong>L&apos;abonnement n&apos;est pas remboursable</strong>, ni
+              au prorata ni en totalité : ni en cas d&apos;arrêt de votre
+              activité, ni si vous fermez votre boutique, ni si Ti-Boutik la
+              ferme pour manquement aux présentes conditions (contenus illicites,
+              tromperie sur les prix, défaut de paiement). Un abonnement payé
+              reste dû jusqu&apos;à son terme, et l&apos;avantage de la formule
+              annuelle est acquis au moment du paiement. Vous pouvez résilier à
+              tout moment : la résiliation arrête le renouvellement, elle ne
+              rembourse pas la période en cours.
             </p>
             <p className="mt-3">
               Le paiement est effectué par carte bancaire auprès de notre
