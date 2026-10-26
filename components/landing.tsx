@@ -233,9 +233,9 @@ export default function Landing() {
 
       {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de
           vraies pages de l'application (app/exemples/<peau>), en lecture seule.
-          Elles ne défilent pas dans la landing : on les regarde, on clique, on
-          les ouvre en vrai. Un aperçu qui bouge dans son cadre donne l'impression
-          d'un gadget ; une image fixe à taille réelle donne envie d'entrer. */}
+          Chaque vignette est une fenêtre de navigateur : la page est rendue en
+          1280 px (sa mise en page d'ordinateur) puis réduite d'un bloc, comme
+          une capture — jamais recadrée ni étirée. Un clic ouvre la galerie. */}
       <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <FadeIn>
@@ -249,27 +249,27 @@ export default function Landing() {
               voulez.
             </p>
           </FadeIn>
-          <div className="mt-8 space-y-6">
+          <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { peau: "neon", nom: "Néon", note: "La nuit, les prix en gros." },
               { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
               { peau: "magazine", nom: "Magazine", note: "La une d'un journal." },
             ].map((e, i) => (
-              <FadeIn key={e.peau} delay={i * 0.06}>
+              <FadeIn key={e.peau} delay={i * 0.08}>
                 <a
                   href={`${APP_URL}/exemples/neon`}
-                  className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/10 transition hover:shadow-xl hover:ring-emerald-700/40"
+                  className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
+                  aria-label={`Voir les sept habillages, à commencer par ${e.nom}`}
                 >
-                  <div className="flex items-center justify-between gap-3 border-b border-black/5 px-4 py-3">
-                    <div className="flex items-baseline gap-3">
-                      <span className="text-sm font-bold">{e.nom}</span>
-                      <span className="text-xs text-zinc-500">{e.note}</span>
-                    </div>
-                    <span className="text-xs font-bold text-emerald-800 opacity-0 transition group-hover:opacity-100">
-                      Ouvrir la boutique →
+                  <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-red-300" />
+                    <span className="h-2 w-2 rounded-full bg-amber-300" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                    <span className="ml-2 truncate text-[10px] text-zinc-400">
+                      ti-boutik.fr/exemples/{e.peau}
                     </span>
                   </div>
-                  <div className="relative h-[460px] overflow-hidden sm:h-[560px]">
+                  <div className="cadre-exemple-vue relative overflow-hidden">
                     <iframe
                       src={`${APP_URL}/exemples/${e.peau}`}
                       title={`Exemple de boutique — ${e.nom}`}
@@ -277,10 +277,12 @@ export default function Landing() {
                       scrolling="no"
                       tabIndex={-1}
                       aria-hidden="true"
-                      className="pointer-events-none absolute left-0 top-0 h-[900px] w-full origin-top-left border-0"
+                      className="absolute left-0 top-0 border-0"
                     />
-                    {/* le clic appartient au lien, jamais à la page d'exemple */}
-                    <span className="absolute inset-0" aria-hidden="true" />
+                  </div>
+                  <div className="border-t border-black/5 px-4 py-3">
+                    <p className="text-sm font-bold">{e.nom}</p>
+                    <p className="text-xs text-zinc-500 group-hover:text-emerald-800">{e.note}</p>
                   </div>
                 </a>
               </FadeIn>
@@ -300,6 +302,23 @@ export default function Landing() {
             </p>
           </FadeIn>
         </div>
+        <style>{`
+          /* La page d'exemple est rendue à 1280 px (taille d'un écran
+             d'ordinateur) puis réduite d'un seul tenant : le texte devient
+             petit, mais rien n'est recadré ni agrandi. */
+          .cadre-exemple { width: 333px; }
+          .cadre-exemple-vue { height: 470px; }
+          .cadre-exemple-vue iframe {
+            width: 1280px; height: 1820px;
+            transform: scale(0.26); transform-origin: top left;
+            pointer-events: none;
+          }
+          @media (min-width: 640px) {
+            .cadre-exemple { width: 360px; }
+            .cadre-exemple-vue { height: 510px; }
+            .cadre-exemple-vue iframe { height: 1815px; transform: scale(0.28125); }
+          }
+        `}</style>
       </section>
 
       {/* 4. Avis Google — texte exact, nom tel qu'affiché, nombre d'avis visible */}
