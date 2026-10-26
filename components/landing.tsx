@@ -307,16 +307,16 @@ export default function Landing() {
              d'ordinateur) puis réduite d'un seul tenant : le texte devient
              petit, mais rien n'est recadré ni agrandi. */
           .cadre-exemple { width: 333px; }
-          .cadre-exemple-vue { height: 470px; }
+          .cadre-exemple-vue { height: 400px; }
           .cadre-exemple-vue iframe {
-            width: 1280px; height: 1820px;
-            transform: scale(0.26); transform-origin: top left;
+            width: 1024px; height: 1230px;
+            transform: scale(0.325); transform-origin: top left;
             pointer-events: none;
           }
           @media (min-width: 640px) {
             .cadre-exemple { width: 360px; }
-            .cadre-exemple-vue { height: 510px; }
-            .cadre-exemple-vue iframe { height: 1815px; transform: scale(0.28125); }
+            .cadre-exemple-vue { height: 420px; }
+            .cadre-exemple-vue iframe { transform: scale(0.35156); }
           }
         `}</style>
       </section>
