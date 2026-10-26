@@ -18,12 +18,12 @@ const APP_URL = "https://app.ti-boutik.fr";
 const LIEN_CREER = `${APP_URL}/inscription`;
 const LIEN_CONNEXION = `${APP_URL}/boutique/connexion`;
 
-/* La fiche Google de Killian : 5,0 · 3 avis au 23/10. Le lien porte l'identifiant
+/* La fiche Google de Killian : 5,0 · 4 avis au 26/10. Le lien porte l'identifiant
    de la fiche (place_id), pas une recherche par nom — sinon il tombe sur un homonyme. */
 const AVIS_GOOGLE =
   "https://www.google.com/maps/search/?api=1&query=ti-boutik&query_place_id=ChIJWyvjQw1Dh6oR2GyHPWee2k4";
 const NOTE_GOOGLE = "5,0";
-const NB_AVIS = 3;
+const NB_AVIS = 4;
 
 const PRIX = "39 €";
 
@@ -244,20 +244,20 @@ export default function Landing() {
             </h2>
             <p className="mt-3 max-w-2xl text-zinc-600">
               Même carte, mêmes photos, même panier. Seul l&apos;habillage
-              change : la nuit du néon, le comptoir d&apos;avant, la une d&apos;un
-              journal. Vous choisissez le vôtre, et vous en changez quand vous
+              change : le comptoir d&apos;avant, le papier crème, la table du
+              bistrot. Vous choisissez le vôtre, et vous en changez quand vous
               voulez.
             </p>
           </FadeIn>
           <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { peau: "neon", nom: "Néon", note: "La nuit, les prix en gros." },
               { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
-              { peau: "magazine", nom: "Magazine", note: "La une d'un journal." },
+              { peau: "papier", nom: "Papier", note: "Crème et terre cuite, tout en douceur." },
+              { peau: "nature", nom: "Bistrot nature", note: "Sable et vert forêt." },
             ].map((e, i) => (
               <FadeIn key={e.peau} delay={i * 0.08}>
                 <a
-                  href={`${APP_URL}/exemples/neon`}
+                  href={`${APP_URL}/exemples/retro`}
                   className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
                   aria-label={`Voir les sept habillages, à commencer par ${e.nom}`}
                 >
@@ -290,7 +290,7 @@ export default function Landing() {
           </div>
           <FadeIn delay={0.2} className="mt-8 text-center">
             <a
-              href={`${APP_URL}/exemples/neon`}
+              href={`${APP_URL}/exemples/retro`}
               className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
             >
               Voir les sept habillages
@@ -334,8 +334,19 @@ export default function Landing() {
               <span className="text-zinc-500">· {NB_AVIS} avis Google</span>
             </div>
           </FadeIn>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
             <FadeIn>
+              <blockquote className="h-full rounded-2xl bg-cream p-5 ring-1 ring-black/5">
+                <Stars small />
+                <p className="mt-2 text-zinc-800">
+                  « Très facile à utiliser, je recommande ! »
+                </p>
+                <footer className="mt-2 text-sm font-semibold text-zinc-500">
+                  Gaël Moreau
+                </footer>
+              </blockquote>
+            </FadeIn>
+            <FadeIn delay={0.05}>
               <blockquote className="h-full rounded-2xl bg-cream p-5 ring-1 ring-black/5">
                 <Stars small />
                 <p className="mt-2 text-zinc-800">
