@@ -230,6 +230,70 @@ export default function Landing() {
         </div>
       </section>
 
+
+      {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de vraies
+          pages de l'application (app/exemples/<peau>), en lecture seule — pas
+          des captures, qui seraient périmées dès le premier changement. */}
+      <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <FadeIn>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              La même maison, sept habillages
+            </h2>
+            <p className="mt-3 max-w-2xl text-zinc-600">
+              Même carte, mêmes photos, même panier. Seul l&apos;habillage
+              change : la nuit du néon, le comptoir d&apos;avant, la une d&apos;un
+              journal. Vous choisissez le vôtre, et vous en changez quand vous
+              voulez.
+            </p>
+          </FadeIn>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { peau: "neon", nom: "Néon", note: "La nuit, les prix en gros." },
+              { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
+              { peau: "magazine", nom: "Magazine", note: "La une d'un journal." },
+            ].map((e, i) => (
+              <FadeIn key={e.peau} delay={i * 0.08}>
+                <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/10 shadow-sm">
+                  <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-red-300" />
+                    <span className="h-2 w-2 rounded-full bg-amber-300" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                    <span className="ml-2 truncate text-[10px] text-zinc-400">
+                      ti-boutik.fr/exemples/{e.peau}
+                    </span>
+                  </div>
+                  <iframe
+                    src={`${APP_URL}/exemples/${e.peau}`}
+                    title={`Exemple de boutique — ${e.nom}`}
+                    loading="lazy"
+                    tabIndex={-1}
+                    className="block h-[540px] w-full border-0"
+                  />
+                  <div className="border-t border-black/5 px-4 py-3">
+                    <p className="text-sm font-bold">{e.nom}</p>
+                    <p className="text-xs text-zinc-500">{e.note}</p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn delay={0.2} className="mt-8 text-center">
+            <a
+              href={`${APP_URL}/exemples/neon`}
+              className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
+            >
+              Voir les sept habillages
+              <ArrowRight className="h-5 w-5" />
+            </a>
+            <p className="mt-3 text-sm text-zinc-500">
+              C&apos;est une vraie boutique de l&apos;application, en lecture
+              seule : rien à installer.
+            </p>
+          </FadeIn>
+        </div>
+      </section>
+
       {/* 4. Avis Google — texte exact, nom tel qu'affiché, nombre d'avis visible */}
       <section className="border-t border-black/5 bg-white px-4 py-14">
         <div className="mx-auto max-w-3xl">
