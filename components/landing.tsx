@@ -231,9 +231,11 @@ export default function Landing() {
       </section>
 
 
-      {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de vraies
-          pages de l'application (app/exemples/<peau>), en lecture seule — pas
-          des captures, qui seraient périmées dès le premier changement. */}
+      {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de
+          vraies pages de l'application (app/exemples/<peau>), en lecture seule.
+          Elles ne défilent pas dans la landing : on les regarde, on clique, on
+          les ouvre en vrai. Un aperçu qui bouge dans son cadre donne l'impression
+          d'un gadget ; une image fixe à taille réelle donne envie d'entrer. */}
       <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <FadeIn>
@@ -247,34 +249,40 @@ export default function Landing() {
               voulez.
             </p>
           </FadeIn>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 space-y-6">
             {[
               { peau: "neon", nom: "Néon", note: "La nuit, les prix en gros." },
               { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
               { peau: "magazine", nom: "Magazine", note: "La une d'un journal." },
             ].map((e, i) => (
-              <FadeIn key={e.peau} delay={i * 0.08}>
-                <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/10 shadow-sm">
-                  <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
-                    <span className="h-2 w-2 rounded-full bg-red-300" />
-                    <span className="h-2 w-2 rounded-full bg-amber-300" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                    <span className="ml-2 truncate text-[10px] text-zinc-400">
-                      ti-boutik.fr/exemples/{e.peau}
+              <FadeIn key={e.peau} delay={i * 0.06}>
+                <a
+                  href={`${APP_URL}/exemples/neon`}
+                  className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/10 transition hover:shadow-xl hover:ring-emerald-700/40"
+                >
+                  <div className="flex items-center justify-between gap-3 border-b border-black/5 px-4 py-3">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-sm font-bold">{e.nom}</span>
+                      <span className="text-xs text-zinc-500">{e.note}</span>
+                    </div>
+                    <span className="text-xs font-bold text-emerald-800 opacity-0 transition group-hover:opacity-100">
+                      Ouvrir la boutique →
                     </span>
                   </div>
-                  <iframe
-                    src={`${APP_URL}/exemples/${e.peau}`}
-                    title={`Exemple de boutique — ${e.nom}`}
-                    loading="lazy"
-                    tabIndex={-1}
-                    className="block h-[540px] w-full border-0"
-                  />
-                  <div className="border-t border-black/5 px-4 py-3">
-                    <p className="text-sm font-bold">{e.nom}</p>
-                    <p className="text-xs text-zinc-500">{e.note}</p>
+                  <div className="relative h-[460px] overflow-hidden sm:h-[560px]">
+                    <iframe
+                      src={`${APP_URL}/exemples/${e.peau}`}
+                      title={`Exemple de boutique — ${e.nom}`}
+                      loading="lazy"
+                      scrolling="no"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="pointer-events-none absolute left-0 top-0 h-[900px] w-full origin-top-left border-0"
+                    />
+                    {/* le clic appartient au lien, jamais à la page d'exemple */}
+                    <span className="absolute inset-0" aria-hidden="true" />
                   </div>
-                </div>
+                </a>
               </FadeIn>
             ))}
           </div>
@@ -287,8 +295,8 @@ export default function Landing() {
               <ArrowRight className="h-5 w-5" />
             </a>
             <p className="mt-3 text-sm text-zinc-500">
-              C&apos;est une vraie boutique de l&apos;application, en lecture
-              seule : rien à installer.
+              De vraies boutiques de l&apos;application, en lecture seule : rien
+              à installer, la commande n&apos;y est pas possible.
             </p>
           </FadeIn>
         </div>
