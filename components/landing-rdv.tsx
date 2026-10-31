@@ -15,6 +15,11 @@ import BandeauMetier from "@/components/bandeau-metier";
 
 const LIEN = "https://app.ti-boutik.fr/inscription?modele=rdv";
 
+/* Les deux captures vivent dans public/rdv/. Un <img> ordinaire ne reçoit pas
+   le basePath de Next : on le préfixe à la main pour que l'aperçu servi sous
+   /apercu/ trouve bien ses images. */
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const GARANTIES = [
   { t: "Sans engagement", d: "Vous arrêtez quand vous voulez, en deux clics." },
   { t: "0 % de commission", d: "Vos réservations sont à vous, pas à moi." },
@@ -224,7 +229,7 @@ export default function LandingRdv() {
         <figure className="mx-auto mt-7 max-w-3xl overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-black/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/rdv/carnet-prestations.jpg"
+            src={`${BASE}/rdv/carnet-prestations.jpg`}
             alt="Les prestations d'un salon : coupe et brushing 1 h 45 €, coupe femme 45 min 35 €, bouton Réserver"
             className="w-full"
           />
@@ -236,7 +241,7 @@ export default function LandingRdv() {
         <figure className="mx-auto mt-4 max-w-3xl overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-black/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/rdv/zetwal.jpg"
+            src={`${BASE}/rdv/zetwal.jpg`}
             alt="Une page de réservation de soins, habillage Zétwal"
             className="w-full"
             loading="lazy"
