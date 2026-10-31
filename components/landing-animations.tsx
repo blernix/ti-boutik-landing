@@ -6,6 +6,7 @@ import {
   Car,
   MapPin,
   Sailboat,
+  Scissors,
   Search,
   Store,
   UtensilsCrossed,
@@ -114,6 +115,44 @@ export function HeroPhone() {
               <MiniBubble side="in" key="merchant">
                 Bonjou ! Commande reçue ✅<br />
                 Prête dans 20 min 🌴
+              </MiniBubble>
+            )}
+          </AnimatePresence>
+        </div>
+        <ChatInput />
+      </PhoneFrame>
+    </div>
+  );
+}
+
+/* Le même téléphone, l'autre métier : une demande de créneau au lieu d'une
+   commande. Même cadre, même conversation, mêmes animations. */
+export function HeroPhoneRdv() {
+  const step = useLoop(4, 1500);
+  return (
+    <div className="mx-auto w-full max-w-[280px]">
+      <PhoneFrame heightClassName="h-[420px]">
+        <StatusBar time="14:32" />
+        <MiniChatHeader
+          title="Carnet · Coiffure"
+          status="En ligne"
+          icon={<Scissors className="h-4 w-4 text-white" />}
+        />
+        <div className="wa-chat-bg no-scrollbar flex-1 overflow-hidden px-3 py-3">
+          <div className="mx-auto mb-3 w-max rounded-lg bg-white/60 px-3 py-1 text-[10px] text-zinc-500">
+            Aujourd&apos;hui
+          </div>
+          <AnimatePresence>
+            <MiniBubble side="out" key="client">
+              📅 Coupe femme, samedi 10 h ?
+              <br />
+              Avec Yann si possible 🙏
+            </MiniBubble>
+            {step === 1 && <TypingDots key="typing" />}
+            {step >= 2 && (
+              <MiniBubble side="in" key="merchant">
+                C&apos;est noté ✅<br />
+                Samedi 10 h avec Yann 🌴
               </MiniBubble>
             )}
           </AnimatePresence>
