@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Check, ChevronDown, MessageCircle, Package, Star, TrendingUp } from "lucide-react";
 import { WhatsAppIcon, StripeIcon } from "@/components/icons";
 import { HeroPhone } from "@/components/landing-animations";
+import BandeauMetier from "@/components/bandeau-metier";
 
 const CONTACT_WHATSAPP = "https://wa.me/590691244857";
 const CONTACT_EMAIL = "mailto:contact@ti-boutik.fr";
@@ -89,7 +90,11 @@ const OBJECTIONS = [
   },
 ];
 
-const FAQ_ITEMS = [
+const FAQ_ITEMS: {
+  q: string;
+  a: string;
+  lien?: { href: string; texte: string };
+}[] = [
   {
     q: "Combien ça coûte ?",
     a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez — ou 390 € par an, deux mois offerts. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, comme sur tout paiement par carte.",
@@ -112,13 +117,21 @@ const FAQ_ITEMS = [
   },
   {
     q: "Mon métier n'est pas un restaurant",
-    a: "Aujourd'hui la plateforme est ouverte aux restaurants, snacks et traiteurs. Les autres métiers arrivent : écrivez-moi, je vous préviens dès que c'est prêt pour vous.",
+    a: "Deux métiers sont ouverts : la commande (restaurant, snack, traiteur) et le rendez-vous (coiffeur, barbier, onglerie, soins, réparation). Si vous travaillez sur rendez-vous, la page est ici :",
+    lien: { href: "/rendez-vous", texte: "la version rendez-vous" },
   },
 ];
 
 export default function Landing() {
   return (
     <div className="min-h-screen bg-cream text-foreground">
+      {/* L'autre métier : une question ouverte, pas une liste de commerces.
+          Il aiguille à l'arrivée puis s'efface au défilement. */}
+      <BandeauMetier
+        question="Vous travaillez sur rendez-vous ?"
+        href="/rendez-vous"
+        libelle="Voir cette version"
+      />
       <Header />
 
       {/* 1. Hero */}
@@ -232,96 +245,6 @@ export default function Landing() {
       </section>
 
 
-      {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de
-          vraies pages de l'application (app/exemples/<peau>), en lecture seule.
-          Chaque vignette est une fenêtre de navigateur : la page est rendue en
-          1280 px (sa mise en page d'ordinateur) puis réduite d'un bloc, comme
-          une capture — jamais recadrée ni étirée. Un clic ouvre la galerie. */}
-      <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <FadeIn>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              La même maison, sept habillages
-            </h2>
-            <p className="mt-3 max-w-2xl text-zinc-600">
-              Même carte, mêmes photos, même panier. Seul l&apos;habillage
-              change : le comptoir d&apos;avant, le papier crème, la table du
-              bistrot. Vous choisissez le vôtre, et vous en changez quand vous
-              voulez.
-            </p>
-          </FadeIn>
-          <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
-              { peau: "papier", nom: "Papier", note: "Crème et terre cuite, tout en douceur." },
-              { peau: "nature", nom: "Bistrot nature", note: "Sable et vert forêt." },
-            ].map((e, i) => (
-              <FadeIn key={e.peau} delay={i * 0.08}>
-                <a
-                  href={`${APP_URL}/exemples/retro`}
-                  className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
-                  aria-label={`Voir les sept habillages, à commencer par ${e.nom}`}
-                >
-                  <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
-                    <span className="h-2 w-2 rounded-full bg-red-300" />
-                    <span className="h-2 w-2 rounded-full bg-amber-300" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
-                    <span className="ml-2 truncate text-[10px] text-zinc-400">
-                      ti-boutik.fr/exemples/{e.peau}
-                    </span>
-                  </div>
-                  <div className="cadre-exemple-vue relative overflow-hidden">
-                    <iframe
-                      src={`${APP_URL}/exemples/${e.peau}`}
-                      title={`Exemple de boutique — ${e.nom}`}
-                      loading="lazy"
-                      scrolling="no"
-                      tabIndex={-1}
-                      aria-hidden="true"
-                      className="absolute left-0 top-0 border-0"
-                    />
-                  </div>
-                  <div className="border-t border-black/5 px-4 py-3">
-                    <p className="text-sm font-bold">{e.nom}</p>
-                    <p className="text-xs text-zinc-500 group-hover:text-emerald-800">{e.note}</p>
-                  </div>
-                </a>
-              </FadeIn>
-            ))}
-          </div>
-          <FadeIn delay={0.2} className="mt-8 text-center">
-            <a
-              href={`${APP_URL}/exemples/retro`}
-              className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
-            >
-              Voir les sept habillages
-              <ArrowRight className="h-5 w-5" />
-            </a>
-            <p className="mt-3 text-sm text-zinc-500">
-              De vraies boutiques de l&apos;application, en lecture seule : rien
-              à installer, la commande n&apos;y est pas possible.
-            </p>
-          </FadeIn>
-        </div>
-        <style>{`
-          /* La page d'exemple est rendue à 1280 px (taille d'un écran
-             d'ordinateur) puis réduite d'un seul tenant : le texte devient
-             petit, mais rien n'est recadré ni agrandi. */
-          .cadre-exemple { width: 333px; }
-          .cadre-exemple-vue { height: 400px; }
-          .cadre-exemple-vue iframe {
-            width: 1024px; height: 1230px;
-            transform: scale(0.325); transform-origin: top left;
-            pointer-events: none;
-          }
-          @media (min-width: 640px) {
-            .cadre-exemple { width: 360px; }
-            .cadre-exemple-vue { height: 420px; }
-            .cadre-exemple-vue iframe { transform: scale(0.35156); }
-          }
-        `}</style>
-      </section>
-
       {/* 4. Avis Google — texte exact, nom tel qu'affiché, nombre d'avis visible */}
       <section className="border-t border-black/5 bg-white px-4 py-14">
         <div className="mx-auto max-w-3xl">
@@ -383,6 +306,96 @@ export default function Landing() {
             </p>
           </FadeIn>
         </div>
+      </section>
+
+      {/* 3 bis. Les habillages : la même boutique, sept robes. Ce sont de
+          vraies pages de l'application (app/exemples/<peau>), en lecture seule.
+          Chaque vignette est une fenêtre de navigateur : la page est rendue en
+          1280 px (sa mise en page d'ordinateur) puis réduite d'un bloc, comme
+          une capture — jamais recadrée ni étirée. Un clic ouvre la galerie. */}
+      <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
+        <div className="mx-auto max-w-6xl">
+          <FadeIn>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              La même maison, sept habillages
+            </h2>
+            <p className="mt-3 max-w-2xl text-zinc-600">
+              Même carte, mêmes photos, même panier. Seul l&apos;habillage
+              change : le comptoir d&apos;avant, le papier crème, la table du
+              bistrot. Vous choisissez le vôtre, et vous en changez quand vous
+              voulez.
+            </p>
+          </FadeIn>
+          <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { peau: "retro", nom: "Rétro", note: "Le comptoir d'avant." },
+              { peau: "papier", nom: "Papier", note: "Crème et terre cuite, tout en douceur." },
+              { peau: "nature", nom: "Bistrot nature", note: "Sable et vert forêt." },
+            ].map((e, i) => (
+              <FadeIn key={e.peau} delay={i * 0.08}>
+                <a
+                  href={`${APP_URL}/exemples/${e.peau}`}
+                  className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
+                  aria-label={`Voir les sept habillages, à commencer par ${e.nom}`}
+                >
+                  <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-red-300" />
+                    <span className="h-2 w-2 rounded-full bg-amber-300" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-300" />
+                    <span className="ml-2 truncate text-[10px] text-zinc-400">
+                      ti-boutik.fr/exemples/{e.peau}
+                    </span>
+                  </div>
+                  <div className="cadre-exemple-vue relative overflow-hidden">
+                    <iframe
+                      src={`${APP_URL}/exemples/${e.peau}`}
+                      title={`Exemple de boutique — ${e.nom}`}
+                      loading="lazy"
+                      scrolling="no"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="absolute left-0 top-0 border-0"
+                    />
+                  </div>
+                  <div className="border-t border-black/5 px-4 py-3">
+                    <p className="text-sm font-bold">{e.nom}</p>
+                    <p className="text-xs text-zinc-500 group-hover:text-emerald-800">{e.note}</p>
+                  </div>
+                </a>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn delay={0.2} className="mt-8 text-center">
+            <Link
+              href="/habillages"
+              className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
+            >
+              Voir les sept habillages
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+            <p className="mt-3 text-sm text-zinc-500">
+              De vraies boutiques de l&apos;application, en lecture seule : rien
+              à installer, la commande n&apos;y est pas possible.
+            </p>
+          </FadeIn>
+        </div>
+        <style>{`
+          /* La page d'exemple est rendue à 1280 px (taille d'un écran
+             d'ordinateur) puis réduite d'un seul tenant : le texte devient
+             petit, mais rien n'est recadré ni agrandi. */
+          .cadre-exemple { width: 333px; }
+          .cadre-exemple-vue { height: 400px; }
+          .cadre-exemple-vue iframe {
+            width: 1024px; height: 1230px;
+            transform: scale(0.325); transform-origin: top left;
+            pointer-events: none;
+          }
+          @media (min-width: 640px) {
+            .cadre-exemple { width: 360px; }
+            .cadre-exemple-vue { height: 420px; }
+            .cadre-exemple-vue iframe { transform: scale(0.35156); }
+          }
+        `}</style>
       </section>
 
       {/* 5. Problème : avant / après */}
@@ -604,6 +617,18 @@ export default function Landing() {
             </a>
           </p>
         </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <p className="mt-6 border-t border-black/5 pt-5 text-center text-sm text-zinc-600">
+            Votre activité, c&apos;est des créneaux plutôt que des commandes ?{" "}
+            <Link
+              href="/rendez-vous"
+              className="font-semibold text-emerald-800 underline underline-offset-4"
+            >
+              La version rendez-vous
+            </Link>
+          </p>
+        </FadeIn>
       </section>
 
       {/* 9 bis. L'assistant IA — petit bloc, bien visible */}
@@ -653,7 +678,7 @@ export default function Landing() {
         <div className="mt-8 space-y-3">
           {FAQ_ITEMS.map((item, i) => (
             <FadeIn key={item.q} delay={i * 0.03}>
-              <FaqItem q={item.q} a={item.a} />
+              <FaqItem q={item.q} a={item.a} lien={item.lien} />
             </FadeIn>
           ))}
         </div>
@@ -939,7 +964,15 @@ function Header() {
   );
 }
 
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({
+  q,
+  a,
+  lien,
+}: {
+  q: string;
+  a: string;
+  lien?: { href: string; texte: string };
+}) {
   const [open, setOpen] = useState(false);
   return (
     <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/5">
@@ -961,7 +994,21 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         transition={{ duration: 0.25, ease: "easeInOut" }}
         className="overflow-hidden"
       >
-        <p className="px-5 pb-4 text-zinc-600">{a}</p>
+        <p className="px-5 pb-4 text-zinc-600">
+          {a}
+          {lien && (
+            <>
+              {" "}
+              <Link
+                href={lien.href}
+                className="font-semibold text-emerald-800 underline underline-offset-4"
+              >
+                {lien.texte}
+              </Link>
+              .
+            </>
+          )}
+        </p>
       </motion.div>
     </div>
   );

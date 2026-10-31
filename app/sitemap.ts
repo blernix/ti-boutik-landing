@@ -12,6 +12,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      // Deux vraies pages, indexables : c'est elles qui captent « page de
+      // réservation coiffeur Guadeloupe » et « habillages boutique ».
+      url: `${SITE_URL}/rendez-vous`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/habillages`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
       url: `${SITE_URL}/demo`,
       lastModified: new Date(),
       changeFrequency: "monthly",
