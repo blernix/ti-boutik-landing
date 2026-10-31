@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kannòt Tresses — Pointe-à-Pitre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* Kannòt Tresses — direction « imprimé » : encre sur papier, affiche sérigraphiée. */
+  :root{
+    --papier:#f3ebda; --encre:#17203f; --hibiscus:#ff4a2b; --safran:#efb52e; --trait:rgba(23,32,63,.22);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--papier); color:var(--encre);
+    font-family:Archivo,system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(23,32,63,.055) 1px, transparent 1.1px);
+    background-size:4px 4px;
+  }
+  a{color:inherit}
+  .mono{font-family:"Space Mono",ui-monospace,monospace; text-transform:uppercase; letter-spacing:.14em; font-size:11px}
+  .enveloppe{max-width:1180px; margin:0 auto; padding:0 24px}
+
+  /* ---- bandeau de tête ---- */
+  .tete{border-bottom:1px solid var(--trait)}
+  .tete .enveloppe{display:flex; align-items:center; justify-content:space-between; gap:16px; padding-top:14px; padding-bottom:14px}
+  .marque{display:flex; align-items:baseline; gap:12px}
+  .marque b{font-family:Anton,sans-serif; font-weight:400; font-size:26px; letter-spacing:.01em}
+  .marque span{font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; opacity:.66}
+  .tete nav{display:flex; gap:22px}
+  .tete nav a{text-decoration:none; font-size:12.5px; font-weight:600; padding-bottom:2px; border-bottom:2px solid transparent}
+  .tete nav a:hover{border-color:var(--hibiscus)}
+
+  /* ---- héros ---- */
+  .heros{position:relative; border-bottom:1px solid var(--trait); overflow:hidden}
+  .heros .enveloppe{display:grid; grid-template-columns:1.06fr .94fr; gap:44px; padding-top:56px; padding-bottom:56px; align-items:start}
+  .surtitre{display:flex; align-items:center; gap:10px; margin-bottom:22px}
+  .surtitre i{display:block; width:34px; height:2px; background:var(--hibiscus)}
+  h1{font-family:Anton,sans-serif; font-weight:400; margin:0; font-size:clamp(56px,9.4vw,124px); line-height:.86; letter-spacing:-.015em}
+  h1 .creux{color:transparent; -webkit-text-stroke:2.4px var(--encre)}
+  h1 .deux{display:block; padding-left:.62em}
+  .chapo{max-width:34ch; margin:26px 0 0; font-size:15.5px; line-height:1.55; color:rgba(23,32,63,.82)}
+  .boutons{display:flex; flex-wrap:wrap; gap:12px; margin-top:30px}
+  .btn{display:inline-flex; align-items:center; gap:9px; text-decoration:none; border-radius:2px;
+    padding:16px 24px; font-size:13.5px; font-weight:800; letter-spacing:.02em; text-transform:uppercase;
+    border:2px solid var(--encre); transition:transform .14s ease, background .14s ease, color .14s ease}
+  .btn:hover{transform:translate(-2px,-2px)}
+  .btn.noir{background:var(--encre); color:var(--papier); box-shadow:5px 5px 0 var(--hibiscus)}
+  .btn.creux{background:transparent}
+  .btn.creux:hover{background:var(--safran)}
+
+  /* photo + tampons */
+  .vue{position:relative}
+  .vue .cadre{position:relative; border:2px solid var(--encre); background:#fff; padding:8px; box-shadow:10px 10px 0 rgba(23,32,63,.14)}
+  .vue img{display:block; width:100%; height:clamp(330px,44vw,520px); object-fit:cover; filter:grayscale(.18) contrast(1.06)}
+  .halftone{position:absolute; inset:8px; pointer-events:none;
+    background-image:radial-gradient(rgba(23,32,63,.5) .9px, transparent 1px);
+    background-size:4px 4px; mix-blend-mode:multiply; opacity:.5}
+  .tampon{position:absolute; font-family:Anton,sans-serif; line-height:1; text-align:center;
+    background:var(--safran); border:2px solid var(--encre); padding:12px 14px; font-size:21px; box-shadow:4px 4px 0 var(--encre)}
+  .tampon.prix{right:-14px; top:-18px; transform:rotate(7deg)}
+  .tampon.duree{left:-18px; bottom:52px; background:var(--hibiscus); color:var(--papier); transform:rotate(-6deg)}
+  .legende{margin:14px 0 0; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:rgba(23,32,63,.6)}
+
+  /* ---- ruban défilant ---- */
+  .ruban{background:var(--encre); color:var(--safran); overflow:hidden; border-bottom:1px solid var(--encre)}
+  .ruban div{display:flex; gap:34px; padding:11px 0; width:max-content; animation:defile 26s linear infinite; font-family:"Space Mono",monospace; font-size:11.5px; letter-spacing:.24em; text-transform:uppercase}
+  .ruban span{display:flex; align-items:center; gap:34px; white-space:nowrap}
+  .ruban b{color:var(--hibiscus)}
+  @keyframes defile{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion:reduce){.ruban div{animation:none}}
+
+  /* ---- tableau des prix ---- */
+  .tableau{padding:66px 0 10px}
+  .titre-section{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; margin-bottom:26px; border-bottom:2px solid var(--encre); padding-bottom:12px}
+  .titre-section h2{font-family:Anton,sans-serif; font-weight:400; margin:0; font-size:clamp(30px,4vw,46px); line-height:1}
+  .titre-section p{margin:0; max-width:30ch; font-size:12.5px; line-height:1.5; color:rgba(23,32,63,.66)}
+  .lignes{list-style:none; margin:0; padding:0}
+  .lignes li{display:grid; grid-template-columns:44px 1fr auto auto; align-items:baseline; gap:16px;
+    padding:17px 10px; border-bottom:1px solid var(--trait); transition:background .16s ease, padding-left .16s ease}
+  .lignes li:hover{background:var(--safran); padding-left:16px}
+  .lignes .n{font-family:"Space Mono",monospace; font-size:11px; opacity:.55}
+  .lignes .nom{font-size:19px; font-weight:800; letter-spacing:-.01em}
+  .lignes .nom small{display:block; font-weight:400; font-size:12.5px; opacity:.7; margin-top:3px; letter-spacing:0}
+  .lignes .duree{font-family:"Space Mono",monospace; font-size:11.5px; opacity:.75}
+  .lignes .prix{font-family:Anton,sans-serif; font-size:22px; min-width:76px; text-align:right}
+
+  /* ---- prochain créneau + billet ---- */
+  .creneau{margin:54px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start}
+  .encart{border:2px solid var(--encre); background:#fff; padding:24px; position:relative; box-shadow:8px 8px 0 rgba(23,32,63,.12)}
+  .encart h3{font-family:Anton,sans-serif; font-weight:400; margin:0 0 6px; font-size:26px}
+  .prochaine{display:flex; align-items:baseline; gap:14px; margin-top:8px}
+  .prochaine b{font-family:Anton,sans-serif; font-size:clamp(44px,6vw,64px); line-height:.9}
+  .prochaine span{font-family:"Space Mono",monospace; font-size:12px; letter-spacing:.1em; text-transform:uppercase}
+  .cachet{position:absolute; right:18px; top:16px; border:2px solid var(--hibiscus); color:var(--hibiscus);
+    padding:6px 10px; font-family:"Space Mono",monospace; font-size:10px; letter-spacing:.16em; transform:rotate(-8deg); opacity:.9}
+
+  /* le billet de réservation (démo, sans serveur) */
+  .billet{border:2px solid var(--encre); background:var(--papier); position:relative; box-shadow:8px 8px 0 var(--encre)}
+  .billet summary{list-style:none; cursor:pointer; padding:20px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+    font-family:Anton,sans-serif; font-size:22px; border-bottom:2px solid var(--encre)}
+  .billet summary::-webkit-details-marker{display:none}
+  .billet summary i{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.16em; font-style:normal; background:var(--hibiscus); color:var(--papier); padding:6px 9px}
+  .dedans{padding:22px 24px 26px; display:grid; gap:18px}
+  .jours{display:flex; gap:8px; overflow:auto; padding-bottom:4px}
+  .jour{flex:0 0 auto; border:2px solid var(--encre); background:#fff; padding:9px 12px; text-align:center; cursor:pointer; font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.08em}
+  .jour b{display:block; font-family:Anton,sans-serif; font-size:19px; letter-spacing:0; margin-top:3px}
+  .jour[aria-pressed="true"]{background:var(--encre); color:var(--papier)}
+  .heures{display:flex; flex-wrap:wrap; gap:8px}
+  .heure{border:2px solid var(--encre); background:#fff; padding:10px 14px; font-family:"Space Mono",monospace; font-size:12px; cursor:pointer}
+  .heure[aria-pressed="true"]{background:var(--safran); box-shadow:3px 3px 0 var(--encre)}
+  .champs{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .champs label{display:grid; gap:5px; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; font-family:"Space Mono",monospace}
+  .champs input{width:100%; min-width:0; border:2px solid var(--encre); background:#fff; padding:11px 12px; font:inherit; font-size:14px}
+  .valider{border:2px solid var(--encre); background:var(--hibiscus); color:var(--papier); padding:15px; font-weight:800;
+    text-transform:uppercase; letter-spacing:.04em; font-size:13px; cursor:pointer; box-shadow:5px 5px 0 var(--encre)}
+  .perfo{border-top:2px dashed var(--encre); position:relative; margin:4px -24px 0}
+  .perfo::before,.perfo::after{content:""; position:absolute; top:-9px; width:16px; height:16px; border:2px solid var(--encre); border-radius:50%; background:var(--papier)}
+  .perfo::before{left:-9px}.perfo::after{right:-9px}
+  .note{font-size:11.5px; line-height:1.5; opacity:.7; margin:0}
+
+  /* ---- infos ---- */
+  .infos{margin-top:64px; border-top:2px solid var(--encre); padding-top:30px; display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:28px; padding-bottom:70px}
+  .infos h4{font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; margin:0 0 10px; opacity:.6}
+  .infos p{margin:0; font-size:14.5px; line-height:1.65}
+  .wa{display:inline-flex; align-items:center; gap:9px; margin-top:10px; text-decoration:none; background:#128c4a; color:#fff;
+    padding:12px 16px; font-weight:700; font-size:13px; border-radius:3px}
+  .pied{border-top:1px solid var(--trait); padding:18px 0 40px; display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    font-family:"Space Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; opacity:.62}
+
+  @media (max-width:900px){
+    .heros .enveloppe{grid-template-columns:1fr; gap:38px; padding-top:38px; padding-bottom:40px}
+    .creneau{grid-template-columns:1fr}
+    .infos{grid-template-columns:1fr 1fr}
+    .tete nav{display:none}
+    .lignes li{grid-template-columns:32px 1fr auto; row-gap:6px}
+    .lignes .duree{grid-column:2; opacity:.6}
+    .lignes .prix{grid-column:3; grid-row:1}
+    .champs{grid-template-columns:1fr}
+    .tampon.prix{right:6px; top:6px}
+    .tampon.duree{left:6px; bottom:8px}
+  }
+</style>
+</head>
+<body>
+
+<header class="tete">
+  <div class="enveloppe">
+    <div class="marque">
+      <b>KANNÒT</b><span>Tresses · Pointe-à-Pitre</span>
+    </div>
+    <nav>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#reserver">Réserver</a>
+      <a href="#infos">Le salon</a>
+    </nav>
+  </div>
+</header>
+
+<section class="heros">
+  <div class="enveloppe">
+    <div>
+      <p class="surtitre mono"><i></i>Mélissa Rivière · depuis 2019</p>
+      <h1>
+        TRESSES
+        <span class="deux"><span class="creux">COLLÉES</span><br>&amp; NATTES</span>
+      </h1>
+      <p class="chapo">Un fauteuil, une tête, le temps qu'il faut. On travaille à la main, sans machine, dans le salon de la rue Frébault.</p>
+      <div class="boutons">
+        <a class="btn noir" href="#reserver">Réserver un créneau</a>
+        <a class="btn creux" href="#tarifs">Voir le tableau</a>
+      </div>
+    </div>
+    <div class="vue">
+      <div class="cadre">
+        <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&q=80&auto=format&fit=crop" alt="Portrait, cheveux naturels volumineux" />
+        <span class="halftone"></span>
+      </div>
+      <div class="tampon prix">DÈS 45 €</div>
+      <div class="tampon duree">2 H 30 MAX</div>
+      <p class="legende">Atelier 12, rue Frébault — 2ᵉ étage, sonnez deux fois</p>
+    </div>
+  </div>
+</section>
+
+<div class="ruban" aria-hidden="true">
+  <div>
+    <span>Tresses collées <b>✳</b> Nattes <b>✳</b> Locks <b>✳</b> Soin du cuir chevelu <b>✳</b> Enfants bienvenus <b>✳</b> Sans machine <b>✳</b></span>
+    <span>Tresses collées <b>✳</b> Nattes <b>✳</b> Locks <b>✳</b> Soin du cuir chevelu <b>✳</b> Enfants bienvenus <b>✳</b> Sans machine <b>✳</b></span>
+  </div>
+</div>
+
+<main class="enveloppe">
+  <section class="tableau" id="tarifs">
+    <div class="titre-section">
+      <h2>LE TABLEAU</h2>
+      <p>Les prix sont fermes. La durée comprend la préparation et le séchage — pas de supplément surprise à la fin.</p>
+    </div>
+    <ul class="lignes">
+      <li><span class="n">01</span><span class="nom">Tresses collées<small>Deux à six rangs, sur cheveux naturels ou après pose</small></span><span class="duree">1 h 30</span><span class="prix">45 €</span></li>
+      <li><span class="n">02</span><span class="nom">Nattes collées longues<small>Jusqu'aux omoplates, finition au fil</small></span><span class="duree">2 h 30</span><span class="prix">70 €</span></li>
+      <li><span class="n">03</span><span class="nom">Knotless<small>Mèches fournies, densité au choix</small></span><span class="duree">3 h</span><span class="prix">110 €</span></li>
+      <li><span class="n">04</span><span class="nom">Locks — entretien<small>Resserrage racine, lavage au bac</small></span><span class="duree">1 h</span><span class="prix">55 €</span></li>
+      <li><span class="n">05</span><span class="nom">Soin du cuir chevelu<small>Gommage, huile tiède, massage 15 min</small></span><span class="duree">40 min</span><span class="prix">35 €</span></li>
+      <li><span class="n">06</span><span class="nom">Enfant (moins de 12 ans)<small>Deux rangs, patience incluse</small></span><span class="duree">45 min</span><span class="prix">25 €</span></li>
+    </ul>
+  </section>
+
+  <section class="creneau" id="reserver">
+    <div class="encart">
+      <span class="cachet">DISPONIBLE</span>
+      <h3>Prochain créneau</h3>
+      <p class="note">Le carnet se remplit vite le samedi. Un acompte de 10 € tient la place.</p>
+      <div class="prochaine"><b>VEN. 30</b><span>10 h 30 · 1 h 30<br>avec Mélissa</span></div>
+      <div class="boutons" style="margin-top:20px">
+        <a class="btn noir" href="#billet">Prendre ce créneau</a>
+      </div>
+    </div>
+
+    <details class="billet" id="billet">
+      <summary>Réserver <i>3 étapes · 1 min</i></summary>
+      <div class="dedans">
+        <div class="jours" role="group" aria-label="Jour">
+          <button class="jour" aria-pressed="false">JEU<b>29</b></button>
+          <button class="jour" aria-pressed="true">VEN<b>30</b></button>
+          <button class="jour" aria-pressed="false">SAM<b>31</b></button>
+          <button class="jour" aria-pressed="false">MAR<b>3</b></button>
+          <button class="jour" aria-pressed="false">MER<b>4</b></button>
+        </div>
+        <div class="heures" role="group" aria-label="Heure">
+          <button class="heure" aria-pressed="false">08:30</button>
+          <button class="heure" aria-pressed="true">10:30</button>
+          <button class="heure" aria-pressed="false">14:00</button>
+          <button class="heure" aria-pressed="false">16:30</button>
+        </div>
+        <div class="champs">
+          <label>Votre nom<input placeholder="Nadia C." /></label>
+          <label>WhatsApp<input placeholder="0690 00 00 00" /></label>
+        </div>
+        <div class="perfo"></div>
+        <p class="note">Tresses collées · 1 h 30 · 45 € — acompte 10 € par carte pour tenir le fauteuil. Le reste se règle au salon.</p>
+        <button class="valider" type="button">Réserver vendredi 10 h 30</button>
+      </div>
+    </details>
+  </section>
+
+  <section class="infos" id="infos">
+    <div>
+      <h4>Le salon</h4>
+      <p>12 rue Frébault, 2ᵉ étage<br>97110 Pointe-à-Pitre<br>Sonner deux fois, la porte est lourde.</p>
+    </div>
+    <div>
+      <h4>Ouverture</h4>
+      <p>Mardi — vendredi · 8 h 30 → 18 h<br>Samedi · 8 h → 15 h<br>Dimanche et lundi fermé</p>
+    </div>
+    <div>
+      <h4>Parler à Mélissa</h4>
+      <p>Une question sur une pose, une couleur, un enfant qui a peur du peigne ?</p>
+      <a class="wa" href="#reserver">WhatsApp · 0690 12 34 56</a>
+    </div>
+  </section>
+</main>
+
+<footer class="pied enveloppe">
+  <span>Kannòt Tresses · Pointe-à-Pitre</span>
+  <span>Imprimé en deux couleurs</span>
+  <span>Réservation en ligne · sans compte</span>
+</footer>
+
+<script>
+  /* Démo : les pastilles se sélectionnent, rien n'est envoyé. */
+  document.querySelectorAll('.jour').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.jour').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+  document.querySelectorAll('.heure').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.heure').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+</script>
+</body>
+</html>

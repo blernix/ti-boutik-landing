@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Zétwal — onglerie & soins, Le Gosier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* Zétwal — direction « nuit » : presque noir, deux lueurs, beaucoup d'air. */
+  :root{
+    --nuit:#07060f; --nuit2:#0d0b1a; --brume:#f2eefc; --lilas:#c6b7ff; --or:#e9c98f; --filet:rgba(242,238,252,.14);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--nuit); color:var(--brume);
+    font-family:Jost,system-ui,sans-serif; font-weight:300; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  /* les deux lueurs + un grain très fin */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(60vw 50vw at 12% -8%, rgba(184,166,255,.20), transparent 62%),
+      radial-gradient(52vw 46vw at 96% 22%, rgba(233,201,143,.13), transparent 66%),
+      radial-gradient(70vw 60vw at 50% 118%, rgba(184,166,255,.10), transparent 70%);
+  }
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.035;
+    background-image:radial-gradient(#fff .6px, transparent .7px); background-size:3px 3px;
+  }
+  main,header,footer{position:relative; z-index:1}
+  a{color:inherit}
+  .caps{font-size:10.5px; letter-spacing:.34em; text-transform:uppercase; color:rgba(242,238,252,.62)}
+  .enveloppe{max-width:1120px; margin:0 auto; padding:0 28px}
+
+  header{padding:26px 0}
+  header .enveloppe{display:flex; align-items:center; justify-content:space-between; gap:18px}
+  .marque{display:flex; align-items:center; gap:10px; text-decoration:none}
+  .marque b{font-family:"Cormorant Garamond",serif; font-weight:400; font-size:27px; letter-spacing:.30em}
+  .marque i{font-style:normal; color:var(--or); font-size:13px}
+  header nav{display:flex; align-items:center; gap:26px}
+  header nav a{text-decoration:none; font-size:13px; letter-spacing:.06em; color:rgba(242,238,252,.78)}
+  header nav a:hover{color:#fff}
+  .pilule{border:1px solid rgba(242,238,252,.35); border-radius:999px; padding:11px 20px; font-size:12.5px; letter-spacing:.10em; text-transform:uppercase; transition:background .2s, color .2s, border-color .2s}
+  .pilule:hover{background:var(--brume); color:var(--nuit); border-color:var(--brume)}
+
+  /* ---- héros ---- */
+  .heros{padding:52px 0 0; text-align:center}
+  .heros h1{
+    font-family:"Cormorant Garamond",serif; font-weight:300; margin:20px 0 0;
+    font-size:clamp(44px,7.6vw,96px); line-height:.98; letter-spacing:-.01em;
+  }
+  .heros h1 em{font-style:italic; color:var(--lilas)}
+  .heros p.chapo{max-width:46ch; margin:22px auto 0; font-size:15.5px; line-height:1.75; color:rgba(242,238,252,.72)}
+  .actions{display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:34px}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:10px; text-decoration:none;
+    padding:16px 30px; border-radius:999px; font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; font-weight:400;
+    border:1px solid transparent; transition:transform .2s ease, box-shadow .2s ease, background .2s}
+  .btn.plein{background:linear-gradient(120deg,var(--lilas),#d9ccff); color:#15102b; box-shadow:0 18px 44px -18px rgba(184,166,255,.85)}
+  .btn.plein:hover{transform:translateY(-2px); box-shadow:0 24px 54px -18px rgba(184,166,255,.95)}
+  .btn.contour{border-color:rgba(242,238,252,.32); color:var(--brume)}
+  .btn.contour:hover{border-color:var(--or); color:var(--or)}
+
+  /* la constellation des soins */
+  .ciel{margin:54px auto 0; max-width:960px; position:relative; height:92px}
+  .ciel svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+  .ciel span{position:absolute; transform:translate(-50%,0); font-family:"Cormorant Garamond",serif; font-size:clamp(14px,1.5vw,17px); font-style:italic; color:rgba(242,238,252,.86); white-space:nowrap}
+  .ciel span::before{content:""; display:block; width:5px; height:5px; margin:0 auto 7px; border-radius:50%; background:var(--or); box-shadow:0 0 12px 2px rgba(233,201,143,.55)}
+  .ciel span::after{content:""; position:absolute; left:50%; bottom:100%; margin-bottom:12px; width:1px; height:var(--fil,22px);
+    background:linear-gradient(to top, rgba(233,201,143,.5), transparent)}
+
+  /* ---- photo + carte de créneau ---- */
+  .vue{position:relative; margin:18px 0 0}
+  .vue .photo{position:relative; border-radius:26px; overflow:hidden; border:1px solid rgba(242,238,252,.12)}
+  .vue img{display:block; width:100%; height:clamp(320px,46vw,540px); object-fit:cover; filter:saturate(.82) brightness(.82)}
+  .vue .photo::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(7,6,15,.15),rgba(7,6,15,.72))}
+  .rond{position:absolute; left:clamp(14px,4vw,46px); bottom:-54px; width:clamp(120px,13vw,168px); aspect-ratio:1; border-radius:50%;
+    overflow:hidden; border:1px solid rgba(242,238,252,.28); box-shadow:0 30px 60px -30px #000}
+  .rond img{width:100%; height:100%; object-fit:cover; filter:saturate(.9)}
+  .carte{
+    position:absolute; right:clamp(12px,4vw,44px); bottom:-38px; width:min(330px,86vw);
+    background:rgba(13,11,26,.72); border:1px solid rgba(242,238,252,.16); border-radius:18px;
+    backdrop-filter:blur(16px); padding:22px 22px 20px; text-align:left;
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.9);
+  }
+  .carte .caps{color:rgba(242,238,252,.55)}
+  .carte b{display:block; font-family:"Cormorant Garamond",serif; font-weight:400; font-size:31px; margin:6px 0 2px; letter-spacing:.01em}
+  .carte p{margin:0 0 14px; font-size:12.5px; color:rgba(242,238,252,.66)}
+  .carte a{display:block; text-align:center; text-decoration:none; border-radius:12px; padding:12px;
+    background:var(--brume); color:#15102b; font-size:12px; letter-spacing:.14em; text-transform:uppercase}
+
+  /* ---- soins ---- */
+  .soins{padding:110px 0 0}
+  .deux-colonnes{display:grid; grid-template-columns:.85fr 1.15fr; gap:56px; align-items:start}
+  .titre{position:sticky; top:40px}
+  .titre h2{font-family:"Cormorant Garamond",serif; font-weight:300; margin:12px 0 0; font-size:clamp(34px,4.6vw,54px); line-height:1.04}
+  .titre p{margin:16px 0 0; max-width:32ch; font-size:13.5px; line-height:1.7; color:rgba(242,238,252,.62)}
+  .liste{list-style:none; margin:0; padding:0}
+  .liste li{border-top:1px solid var(--filet); padding:22px 0; display:grid; grid-template-columns:38px 1fr auto; gap:12px; align-items:baseline; transition:padding-left .25s ease}
+  .liste li:last-child{border-bottom:1px solid var(--filet)}
+  .liste li:hover{padding-left:10px}
+  .liste .n{font-size:10.5px; letter-spacing:.2em; color:rgba(242,238,252,.4)}
+  .liste .nom{font-family:"Cormorant Garamond",serif; font-size:23px; line-height:1.2}
+  .liste .nom small{display:block; font-family:Jost,sans-serif; font-size:12.5px; letter-spacing:.02em; color:rgba(242,238,252,.55); margin-top:6px}
+  .liste .prix{text-align:right; font-family:"Cormorant Garamond",serif; font-size:22px; color:var(--or); white-space:nowrap}
+  .liste .prix small{display:block; font-family:Jost,sans-serif; font-size:10.5px; letter-spacing:.16em; color:rgba(242,238,252,.45); margin-top:5px}
+
+  /* ---- rituel ---- */
+  .rituel{margin:96px 0 0; padding:54px 0; border-top:1px solid var(--filet); border-bottom:1px solid var(--filet)}
+  .rituel h2{font-family:"Cormorant Garamond",serif; font-weight:300; margin:0 0 34px; font-size:clamp(28px,3.4vw,40px)}
+  .etapes{display:grid; grid-template-columns:repeat(3,1fr); gap:34px}
+  .etape .num{font-family:"Cormorant Garamond",serif; font-size:44px; color:var(--or); line-height:1}
+  .etape h3{margin:10px 0 8px; font-size:14px; letter-spacing:.16em; text-transform:uppercase; font-weight:400}
+  .etape p{margin:0; font-size:13.5px; line-height:1.7; color:rgba(242,238,252,.62)}
+
+  /* ---- réserver ---- */
+  .reserver{margin:88px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center}
+  .reserver .mot{font-family:"Cormorant Garamond",serif; font-weight:300; font-size:clamp(30px,4vw,46px); line-height:1.06; margin:0}
+  .reserver .mot em{font-style:italic; color:var(--lilas)}
+  .reserver p.note{margin:16px 0 0; font-size:13px; line-height:1.7; color:rgba(242,238,252,.6); max-width:36ch}
+  .panneau{background:rgba(13,11,26,.66); border:1px solid rgba(242,238,252,.16); border-radius:22px; padding:26px;
+    backdrop-filter:blur(14px); box-shadow:0 40px 80px -50px #000}
+  .panneau .caps{margin-bottom:12px; display:block}
+  .jours{display:flex; gap:8px; overflow:auto; padding-bottom:6px}
+  .jour{flex:0 0 auto; border:1px solid rgba(242,238,252,.2); border-radius:12px; background:transparent; color:inherit;
+    padding:10px 13px; cursor:pointer; font-family:Jost,sans-serif; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase}
+  .jour b{display:block; font-family:"Cormorant Garamond",serif; font-size:20px; letter-spacing:0; margin-top:3px}
+  .jour[aria-pressed="true"]{border-color:var(--lilas); background:rgba(184,166,255,.14); box-shadow:0 0 0 1px var(--lilas) inset}
+  .heures{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 18px}
+  .heure{border:1px solid rgba(242,238,252,.2); border-radius:10px; background:transparent; color:inherit; padding:11px 16px; font-family:Jost,sans-serif; font-size:13px; cursor:pointer}
+  .heure[aria-pressed="true"]{background:var(--or); border-color:var(--or); color:#1a1408}
+  .champs{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .champs input{width:100%; min-width:0; background:rgba(242,238,252,.05); border:1px solid rgba(242,238,252,.16); border-radius:10px; padding:12px 13px; color:var(--brume); font:inherit; font-size:14px}
+  .champs input::placeholder{color:rgba(242,238,252,.35)}
+  .panneau .valider{margin-top:14px; width:100%; border:0; border-radius:12px; padding:15px; cursor:pointer;
+    background:linear-gradient(120deg,var(--lilas),#d9ccff); color:#15102b; font-family:Jost,sans-serif; font-size:12.5px; letter-spacing:.16em; text-transform:uppercase}
+  .panneau .note{margin:12px 0 0; font-size:11px; color:rgba(242,238,252,.45); line-height:1.5}
+
+  footer{margin-top:96px; border-top:1px solid var(--filet); padding:34px 0 54px}
+  footer .enveloppe{display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:26px}
+  footer h4{margin:0 0 10px; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:rgba(242,238,252,.45); font-weight:400}
+  footer p{margin:0; font-size:13.5px; line-height:1.8; color:rgba(242,238,252,.7)}
+  footer .wa{display:inline-flex; margin-top:10px; text-decoration:none; border:1px solid rgba(233,201,143,.5); color:var(--or); border-radius:999px; padding:10px 18px; font-size:12px; letter-spacing:.1em}
+
+  @media (max-width:900px){
+    .deux-colonnes{grid-template-columns:1fr; gap:26px}
+    .titre{position:static}
+    .etapes{grid-template-columns:1fr; gap:26px}
+    .vue img{height:340px}
+    .carte{position:static; width:100%; margin-top:16px}
+    .rond{position:static; margin:18px auto 0; width:130px}
+    .reserver{grid-template-columns:1fr; gap:26px}
+    .champs{grid-template-columns:1fr}
+    footer .enveloppe{grid-template-columns:1fr}
+    .ciel{display:none}
+    header nav a{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="enveloppe">
+    <a class="marque" href="#haut"><b>ZÉTWAL</b><i>✦</i></a>
+    <nav>
+      <a href="#soins">Les soins</a>
+      <a href="#rituel">Le rituel</a>
+      <a class="pilule" href="#reserver">Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<main id="haut">
+  <section class="heros enveloppe">
+    <p class="caps">Onglerie · soins · Le Gosier — ouvert jusqu'à 20 h</p>
+    <h1>La nuit tombe,<br><em>les mains s'allument.</em></h1>
+    <p class="chapo">Un studio de six places, éclairé bas, où l'on vient après le travail. Pose russe, gainage, soin des mains : on prend une heure, on repart avec autre chose.</p>
+    <div class="actions">
+      <a class="btn plein" href="#reserver">Réserver un soin</a>
+      <a class="btn contour" href="#soins">Voir les tarifs</a>
+    </div>
+
+    <div class="ciel" aria-hidden="true">
+      <span style="left:6%; --fil:18px; top:44px">Pose russe</span>
+      <span style="left:22%; --fil:30px; top:2px">Gainage</span>
+      <span style="left:39%; --fil:14px; top:36px">Baby boomer</span>
+      <span style="left:55%; --fil:34px; top:-6px">Soin des mains</span>
+      <span style="left:71%; --fil:16px; top:30px">Nail art</span>
+      <span style="left:87%; --fil:26px; top:0px">Vernis</span>
+    </div>
+  </section>
+
+  <section class="vue enveloppe">
+    <div class="photo">
+      <img src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1600&q=80&auto=format&fit=crop" alt="Intérieur sombre d'un studio, miroirs ronds et fauteuils" />
+    </div>
+    <div class="rond"><img src="https://images.unsplash.com/photo-1610992015732-2449b76344bc?w=600&q=80&auto=format&fit=crop" alt="Manucure en cours, main posée sur le coussin" /></div>
+    <aside class="carte">
+      <span class="caps">Prochain créneau</span>
+      <b>Jeudi · 18 h 30</b>
+      <p>Une place s'est libérée avec Léa — 45 min.</p>
+      <a href="#reserver">La prendre</a>
+    </aside>
+  </section>
+
+  <section class="soins enveloppe" id="soins">
+    <div class="deux-colonnes">
+      <div class="titre">
+        <p class="caps">La carte</p>
+        <h2>Six soins,<br>pas cinquante.</h2>
+        <p>Chaque prestation comprend la préparation de l'ongle et le séchage. Les prix sont finaux, la durée aussi.</p>
+      </div>
+      <ul class="liste">
+        <li><span class="n">01</span><span class="nom">Pose russe<small>Gel, base renforcée, forme au choix</small></span><span class="prix">55 €<small>1 h 30</small></span></li>
+        <li><span class="n">02</span><span class="nom">Gainage<small>Sur ongle naturel, sans extension</small></span><span class="prix">45 €<small>1 h 15</small></span></li>
+        <li><span class="n">03</span><span class="nom">Baby boomer<small>Dégradé, finition mate ou brillante</small></span><span class="prix">60 €<small>1 h 45</small></span></li>
+        <li><span class="n">04</span><span class="nom">Nail art<small>Un motif par main, dessiné à la main</small></span><span class="prix">+ 15 €<small>+ 20 min</small></span></li>
+        <li><span class="n">05</span><span class="nom">Soin des mains<small>Gommage, masque tiède, massage</small></span><span class="prix">35 €<small>40 min</small></span></li>
+        <li><span class="n">06</span><span class="nom">Dépose + soin<small>Retrait doux, sans arracher</small></span><span class="prix">25 €<small>30 min</small></span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="rituel enveloppe" id="rituel">
+    <h2>Le rituel</h2>
+    <div class="etapes">
+      <div class="etape"><div class="num">I</div><h3>On s'installe</h3><p>Veste au portemanteau, téléphone en silence. Un thé ou une infusion, jamais de discours commercial.</p></div>
+      <div class="etape"><div class="num">II</div><h3>On regarde vos mains</h3><p>Cinq minutes pour parler forme, longueur, ce que vous faites dans la journée. C'est ce qui décide de la pose.</p></div>
+      <div class="etape"><div class="num">III</div><h3>On laisse poser</h3><p>Une heure et demie, sans être pressée. Vous repartez avec les mains qui vont tenir trois semaines.</p></div>
+    </div>
+  </section>
+
+  <section class="reserver enveloppe" id="reserver">
+    <div>
+      <p class="caps">Réservation</p>
+      <p class="mot">Une place,<br><em>une heure</em>,<br>et c'est tout.</p>
+      <p class="note">Aucun compte à créer. Le studio confirme par WhatsApp dans l'heure. Annulation libre jusqu'à 4 h avant.</p>
+    </div>
+    <div class="panneau">
+      <span class="caps">Choisir un jour</span>
+      <div class="jours" role="group" aria-label="Jour">
+        <button class="jour" aria-pressed="false">Jeu<b>29</b></button>
+        <button class="jour" aria-pressed="true">Ven<b>30</b></button>
+        <button class="jour" aria-pressed="false">Sam<b>31</b></button>
+        <button class="jour" aria-pressed="false">Mar<b>3</b></button>
+        <button class="jour" aria-pressed="false">Mer<b>4</b></button>
+      </div>
+      <div class="heures" role="group" aria-label="Heure">
+        <button class="heure" aria-pressed="false">17:00</button>
+        <button class="heure" aria-pressed="true">18:30</button>
+        <button class="heure" aria-pressed="false">19:15</button>
+      </div>
+      <div class="champs">
+        <input placeholder="Votre nom" />
+        <input placeholder="WhatsApp" />
+      </div>
+      <button class="valider" type="button">Réserver vendredi 18 h 30</button>
+      <p class="note">Pose russe · 1 h 30 · 55 €. Acompte de 15 € par carte pour tenir la place.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="enveloppe">
+    <div>
+      <h4>Le studio</h4>
+      <p>Zétwal — 8 rue du Paradis<br>97190 Le Gosier<br>À l'étage, au-dessus de la pharmacie.</p>
+    </div>
+    <div>
+      <h4>Ouverture</h4>
+      <p>Mardi — samedi · 10 h → 20 h<br>Nocturne le jeudi<br>Dimanche et lundi fermé</p>
+    </div>
+    <div>
+      <h4>Écrire</h4>
+      <p>Une question avant de réserver ?</p>
+      <a class="wa" href="#reserver">WhatsApp · 0690 45 67 89</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.jour').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.jour').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+  document.querySelectorAll('.heure').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.heure').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+</script>
+</body>
+</html>

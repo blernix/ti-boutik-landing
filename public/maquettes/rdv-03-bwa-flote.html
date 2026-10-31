@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bwa Floté — atelier tresses & soins, Sainte-Anne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Caveat:wght@500;700&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Bwa Floté — direction « atelier » : papier, argile, bois flotté, écriture à la main. */
+  :root{
+    --os:#ece1cd; --papier:#f7f0e3; --argile:#b4552f; --mousse:#4b5b3a; --encre:#2b2724; --trait:rgba(43,39,36,.18);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth; overflow-x:clip}
+  body{
+    margin:0; background:var(--os); color:var(--encre);
+    font-family:Karla,system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.055'/%3E%3C/svg%3E");
+  }
+  a{color:inherit}
+  .enveloppe{max-width:1160px; margin:0 auto; padding:0 26px}
+  .main{font-family:Caveat,cursive; font-weight:500}
+
+  /* ---- entête ---- */
+  header{padding:26px 0 0}
+  header .enveloppe{display:flex; align-items:center; justify-content:space-between; gap:18px}
+  .marque{text-decoration:none; display:grid; gap:2px}
+  .marque b{font-family:Fraunces,serif; font-weight:700; font-size:27px; letter-spacing:-.02em}
+  .marque svg{display:block; width:150px; height:9px}
+  header .droite{display:flex; align-items:center; gap:20px; font-size:12.5px; letter-spacing:.04em}
+  header .droite a{text-decoration:none; border-bottom:1px solid transparent; padding-bottom:2px}
+  header .droite a:hover{border-color:var(--argile)}
+
+  /* ---- héros ---- */
+  .heros{padding:44px 0 0}
+  .heros .grille{display:grid; grid-template-columns:1.02fr .98fr; gap:48px; align-items:center}
+  .heros h1{font-family:Fraunces,serif; font-weight:500; margin:0; font-size:clamp(38px,5.9vw,74px); line-height:1.02; letter-spacing:-.025em}
+  .heros h1 i{font-style:italic; color:var(--argile)}
+  .heros h1 u{text-decoration:underline; text-decoration-color:var(--mousse); text-decoration-thickness:5px; text-underline-offset:8px; text-decoration-skip-ink:none}
+  .petit{font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(43,39,36,.62)}
+  .chapo{margin:22px 0 0; max-width:38ch; font-size:15.5px; line-height:1.7; color:rgba(43,39,36,.82)}
+  .actions{display:flex; align-items:center; flex-wrap:wrap; gap:16px; margin-top:28px}
+  .btn{display:inline-flex; align-items:center; gap:10px; text-decoration:none; border-radius:999px; padding:15px 26px;
+    font-size:13.5px; font-weight:700; letter-spacing:.01em; background:var(--mousse); color:var(--papier);
+    box-shadow:0 14px 26px -18px rgba(43,39,36,.8); transition:transform .18s ease}
+  .btn:hover{transform:translateY(-2px) rotate(-.4deg)}
+  .btn.clair{background:transparent; color:var(--encre); border:1.5px solid var(--encre); box-shadow:none}
+  .note-main{font-family:Caveat,cursive; font-size:21px; color:var(--argile); transform:rotate(-2.5deg); white-space:nowrap}
+
+  /* collage photo */
+  .collage{position:relative; padding:0 0 34px}
+  .photo{position:relative; border-radius:120px 26px 96px 26px; overflow:hidden;
+    box-shadow:0 30px 60px -40px rgba(43,39,36,.9); transform:rotate(-1.1deg)}
+  .photo img{display:block; width:100%; height:clamp(340px,44vw,500px); object-fit:cover; filter:saturate(.92)}
+  .scotch{position:absolute; width:104px; height:26px; background:rgba(255,255,255,.55); box-shadow:0 2px 6px rgba(43,39,36,.18);
+    backdrop-filter:blur(1px)}
+  .scotch.a{left:-16px; top:34px; transform:rotate(-9deg)}
+  .scotch.b{right:6px; bottom:16px; transform:rotate(6deg)}
+  .pastille{position:absolute; right:-14px; top:-18px; width:112px; height:112px; border-radius:50%; background:var(--argile); color:var(--papier);
+    display:grid; place-content:center; text-align:center; transform:rotate(8deg); box-shadow:0 16px 30px -18px rgba(43,39,36,.9)}
+  .pastille b{display:block; font-family:Fraunces,serif; font-size:27px; line-height:1}
+  .pastille span{font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.88}
+  .ronde{position:absolute; left:-30px; bottom:6px; width:150px; height:150px; border-radius:50%; overflow:hidden; border:6px solid var(--os);
+    box-shadow:0 20px 40px -26px rgba(43,39,36,.9)}
+  .ronde img{width:100%; height:100%; object-fit:cover; filter:sepia(.18)}
+
+  /* ---- bandeau d'atelier ---- */
+  .bande{margin:38px 0 0; border-top:1px solid var(--trait); border-bottom:1px solid var(--trait); padding:16px 0}
+  .bande .enveloppe{display:flex; flex-wrap:wrap; gap:10px 34px; justify-content:space-between; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:rgba(43,39,36,.62)}
+
+  /* ---- prestations ---- */
+  .prestations{padding:72px 0 0}
+  .entete-section{display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:28px}
+  .entete-section h2{font-family:Fraunces,serif; font-weight:500; margin:0; font-size:clamp(30px,3.8vw,44px); letter-spacing:-.02em}
+  .entete-section p{margin:0; max-width:30ch; font-size:13px; line-height:1.65; color:rgba(43,39,36,.66)}
+  .cartes{display:grid; grid-template-columns:repeat(2,1fr); gap:20px}
+  .carte{position:relative; background:var(--papier); border:1px solid var(--trait); padding:26px 26px 24px;
+    border-radius:34px 12px 30px 12px; transition:transform .2s ease, box-shadow .2s ease}
+  .carte:nth-child(2n){border-radius:12px 34px 12px 30px; transform:rotate(.35deg)}
+  .carte:hover{transform:translateY(-4px) rotate(0); box-shadow:0 24px 40px -34px rgba(43,39,36,.9)}
+  .carte h3{font-family:Fraunces,serif; font-weight:500; font-size:25px; margin:0 0 8px; letter-spacing:-.01em}
+  .carte p{margin:0; font-size:13.5px; line-height:1.6; color:rgba(43,39,36,.72); max-width:34ch}
+  .carte .bas{display:flex; align-items:end; justify-content:space-between; gap:14px; margin-top:18px}
+  .carte .quand{font-family:Caveat,cursive; font-size:20px; color:var(--mousse)}
+  .carte .prix{width:74px; height:74px; border-radius:50%; border:1.6px dashed var(--argile); display:grid; place-content:center; text-align:center;
+    font-family:Fraunces,serif; font-size:21px; color:var(--argile); transform:rotate(-4deg)}
+  .carte .prix small{display:block; font-family:Karla,sans-serif; font-size:8.5px; letter-spacing:.14em; text-transform:uppercase; color:rgba(43,39,36,.55); margin-top:2px}
+
+  /* ---- déroulé ---- */
+  .deroule{margin:84px 0 0; display:grid; grid-template-columns:.9fr 1.1fr; gap:48px; align-items:start}
+  .deroule h2{font-family:Fraunces,serif; font-weight:500; margin:0; font-size:clamp(28px,3.6vw,40px); line-height:1.06}
+  .deroule .main-grand{font-family:Caveat,cursive; font-size:24px; color:var(--argile); margin:12px 0 0; transform:rotate(-1.6deg)}
+  .etapes{border-left:1.5px dashed rgba(43,39,36,.32); margin:0; padding:0 0 0 26px; list-style:none; display:grid; gap:26px}
+  .etapes li{position:relative}
+  .etapes li::before{content:""; position:absolute; left:-33px; top:6px; width:13px; height:13px; border-radius:50%; background:var(--os); border:1.5px solid var(--mousse)}
+  .etapes h3{margin:0 0 6px; font-family:Fraunces,serif; font-weight:500; font-size:20px}
+  .etapes p{margin:0; font-size:13.5px; line-height:1.7; color:rgba(43,39,36,.74)}
+
+  /* ---- carnet de réservation ---- */
+  .carnet{margin:88px 0 0; display:grid; grid-template-columns:1fr 1fr; gap:44px; align-items:center}
+  .feuille{position:relative; background:var(--papier); border:1px solid var(--trait); border-radius:8px; padding:28px 28px 24px;
+    box-shadow:0 30px 50px -40px rgba(43,39,36,.9); transform:rotate(-.6deg)}
+  .feuille::before{content:""; position:absolute; left:0; top:0; bottom:0; width:34px;
+    background:repeating-linear-gradient(0deg, transparent 0 26px, rgba(180,85,47,.18) 26px 27px);
+    border-right:1px solid rgba(180,85,47,.18)}
+  .feuille h3{font-family:Fraunces,serif; font-weight:500; margin:0 0 4px; font-size:23px; padding-left:26px}
+  .feuille .sous{padding-left:26px; font-family:Caveat,cursive; font-size:19px; color:var(--argile); margin:0 0 18px}
+  .jours{display:flex; gap:8px; padding-left:26px; overflow:auto; padding-bottom:6px}
+  .jour{flex:0 0 auto; border:1.4px solid var(--encre); border-radius:12px; background:transparent; color:inherit; cursor:pointer;
+    padding:9px 11px; font-family:Karla,sans-serif; font-size:10px; letter-spacing:.1em; text-transform:uppercase}
+  .jour b{display:block; font-family:Fraunces,serif; font-size:19px; letter-spacing:0; margin-top:2px}
+  .jour[aria-pressed="true"]{background:var(--mousse); border-color:var(--mousse); color:var(--papier)}
+  .heures{display:flex; flex-wrap:wrap; gap:8px; padding-left:26px; margin:16px 0 18px}
+  .heure{border:1.4px solid var(--encre); border-radius:999px; background:transparent; color:inherit; cursor:pointer; padding:9px 15px; font-family:Karla,sans-serif; font-size:12.5px}
+  .heure[aria-pressed="true"]{background:var(--argile); border-color:var(--argile); color:var(--papier)}
+  .champs{padding-left:26px; display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .champs input{width:100%; min-width:0; border:0; border-bottom:1.4px solid rgba(43,39,36,.4); background:transparent; padding:10px 2px; font:inherit; font-size:14.5px}
+  .champs input::placeholder{font-family:Caveat,cursive; font-size:18px; color:rgba(43,39,36,.45)}
+  .valider{margin:18px 0 0 26px; width:calc(100% - 26px); border:0; border-radius:999px; padding:15px; cursor:pointer;
+    background:var(--encre); color:var(--papier); font-family:Karla,sans-serif; font-weight:700; font-size:13px; letter-spacing:.03em}
+  .carnet .a-cote h2{font-family:Fraunces,serif; font-weight:500; margin:0; font-size:clamp(28px,3.6vw,42px); line-height:1.05}
+  .carnet .a-cote p{margin:16px 0 0; font-size:14px; line-height:1.75; color:rgba(43,39,36,.76); max-width:36ch}
+  .carnet .a-cote .main-grand{font-family:Caveat,cursive; font-size:23px; color:var(--mousse); margin-top:14px; transform:rotate(-1.4deg)}
+
+  /* ---- infos ---- */
+  .infos{margin:84px 0 0; padding:34px 0 0; border-top:1px solid var(--trait); display:grid; grid-template-columns:1.15fr 1fr 1fr; gap:30px}
+  .infos h4{margin:0 0 10px; font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:rgba(43,39,36,.55); font-weight:700}
+  .infos p{margin:0; font-size:14px; line-height:1.8}
+  .infos .wa{display:inline-flex; align-items:center; gap:9px; margin-top:12px; text-decoration:none; background:#128c4a; color:#fff;
+    padding:12px 18px; border-radius:999px; font-weight:700; font-size:13px}
+
+  footer{margin-top:70px; padding:20px 0 54px; border-top:1px solid var(--trait)}
+  footer .enveloppe{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:rgba(43,39,36,.55)}
+
+  @media (max-width:900px){
+    .heros .grille{grid-template-columns:1fr; gap:34px}
+    .cartes{grid-template-columns:1fr}
+    .deroule,.carnet{grid-template-columns:1fr; gap:30px}
+    .infos{grid-template-columns:1fr 1fr}
+    header .droite{display:none}
+    .ronde{width:110px; height:110px; left:-6px; bottom:-10px}
+    .photo{transform:none}
+    .feuille{transform:none}
+    .pastille{right:10px; top:-8px; transform:rotate(6deg)}
+    .champs{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="enveloppe">
+    <a class="marque" href="#haut">
+      <b>Bwa Floté</b>
+      <svg viewBox="0 0 150 9" aria-hidden="true"><path d="M2,6 C26,1 52,8 78,4 C103,0 128,7 148,3" fill="none" stroke="#b4552f" stroke-width="2" stroke-linecap="round"/></svg>
+    </a>
+    <div class="droite">
+      <span>Sainte-Anne · Guadeloupe</span>
+      <a href="#prestations">Prestations</a>
+      <a href="#carnet">Réserver</a>
+    </div>
+  </div>
+</header>
+
+<main id="haut">
+  <section class="heros enveloppe">
+    <div class="grille">
+      <div>
+        <p class="petit">Atelier de tresses & soins — depuis 2017</p>
+        <h1>Des tresses qui <i>tiennent</i>,<br>un atelier qui <u>respire</u>.</h1>
+        <p class="chapo">Ici, on ne fait pas la queue. Une cliente à la fois, portes ouvertes sur le jardin, et le temps qu'il faut pour que ça tienne jusqu'aux prochaines vacances.</p>
+        <div class="actions">
+          <a class="btn" href="#carnet">Réserver ma place</a>
+          <a class="btn clair" href="#prestations">Les prestations</a>
+          <span class="note-main">premier rendez-vous : −10 €</span>
+        </div>
+      </div>
+      <div class="collage">
+        <div class="photo">
+          <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80&auto=format&fit=crop" alt="Intérieur de l'atelier, fauteuil devant le miroir" />
+        </div>
+        <span class="scotch a"></span>
+        <span class="scotch b"></span>
+        <div class="pastille"><b>2 h</b><span>en moyenne</span></div>
+        <div class="ronde"><img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=600&q=80&auto=format&fit=crop" alt="Bac de lavage du salon" /></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="bande">
+    <div class="enveloppe">
+      <span>Une cliente à la fois</span><span>Sans machine</span><span>Produits sans sulfate</span><span>Enfants bienvenus</span><span>Parking devant</span>
+    </div>
+  </div>
+
+  <section class="prestations enveloppe" id="prestations">
+    <div class="entete-section">
+      <h2>Ce qu'on fait,<br>et combien ça coûte.</h2>
+      <p>Les durées sont réelles : elles incluent la préparation, la pose et le séchage. Pas de rallonge à la fin.</p>
+    </div>
+    <div class="cartes">
+      <article class="carte">
+        <h3>Tresses collées</h3>
+        <p>Deux à huit rangs, sur cheveux naturels. Tenue trois à quatre semaines.</p>
+        <div class="bas"><span class="quand">1 h 30 à 2 h</span><span class="prix">45 €<small>à partir de</small></span></div>
+      </article>
+      <article class="carte">
+        <h3>Knotless & mèches</h3>
+        <p>Mèches fournies, densité au choix, finition au fil. La spécialité de l'atelier.</p>
+        <div class="bas"><span class="quand">3 h à 4 h</span><span class="prix">110 €<small>tout compris</small></span></div>
+      </article>
+      <article class="carte">
+        <h3>Entretien de locks</h3>
+        <p>Resserrage racine, lavage au bac, huile tiède. On repart propre.</p>
+        <div class="bas"><span class="quand">1 h</span><span class="prix">55 €<small>la séance</small></span></div>
+      </article>
+      <article class="carte">
+        <h3>Soin du cuir chevelu</h3>
+        <p>Gommage doux, masque, massage 15 minutes. Seul ou avant une pose.</p>
+        <div class="bas"><span class="quand">40 min</span><span class="prix">35 €<small>la séance</small></span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="deroule enveloppe">
+    <div>
+      <h2>Comment ça se passe</h2>
+      <p class="main-grand">on prend le temps, c'est le principe</p>
+    </div>
+    <ol class="etapes">
+      <li><h3>Vous réservez, je confirme</h3><p>Vous choisissez un créneau, je réponds sur WhatsApp dans la journée. Un acompte de 10 € tient la place.</p></li>
+      <li><h3>On parle de vos cheveux</h3><p>Dix minutes au début : ce que vous supportez, ce que vous voulez éviter, depuis quand. C'est ce qui évite de tout refaire.</p></li>
+      <li><h3>Vous repartez avec la tenue</h3><p>Je vous montre comment dormir et laver sans abîmer. Si ça lâche avant trois semaines, je reprends.</p></li>
+    </ol>
+  </section>
+
+  <section class="carnet enveloppe" id="carnet">
+    <div class="feuille">
+      <h3>Mon carnet</h3>
+      <p class="sous">vendredi 30 — il reste 2 places</p>
+      <div class="jours" role="group" aria-label="Jour">
+        <button class="jour" aria-pressed="false">Jeu<b>29</b></button>
+        <button class="jour" aria-pressed="true">Ven<b>30</b></button>
+        <button class="jour" aria-pressed="false">Sam<b>31</b></button>
+        <button class="jour" aria-pressed="false">Mar<b>3</b></button>
+      </div>
+      <div class="heures" role="group" aria-label="Heure">
+        <button class="heure" aria-pressed="false">08:30</button>
+        <button class="heure" aria-pressed="true">10:00</button>
+        <button class="heure" aria-pressed="false">14:00</button>
+      </div>
+      <div class="champs">
+        <input placeholder="votre nom" />
+        <input placeholder="whatsapp" />
+      </div>
+      <button class="valider" type="button">Réserver vendredi à 10 h</button>
+    </div>
+    <div class="a-cote">
+      <h2>Réservez,<br>je m'occupe du reste.</h2>
+      <p>Le carnet est ouvert du mardi au samedi, de 8 h à 17 h. Le samedi se remplit une semaine à l'avance — si c'est complet, laissez-moi votre numéro, je vous rappelle à la première annulation.</p>
+      <p class="main-grand">à très vite au salon — Nadège</p>
+    </div>
+  </section>
+
+  <section class="infos enveloppe">
+    <div>
+      <h4>L'atelier</h4>
+      <p>Chemin de Bois Jolan<br>97180 Sainte-Anne<br>Portail bois, à droite après le flamboyant.</p>
+    </div>
+    <div>
+      <h4>Ouverture</h4>
+      <p>Mardi — vendredi · 8 h → 17 h<br>Samedi · 8 h → 14 h<br>Dimanche et lundi fermé</p>
+    </div>
+    <div>
+      <h4>Un doute ?</h4>
+      <p>Une question sur une pose ou un entretien ? Écrivez, je réponds moi-même.</p>
+      <a class="wa" href="#carnet">WhatsApp · 0690 78 90 12</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="enveloppe">
+    <span>Bwa Floté · Sainte-Anne</span>
+    <span>Atelier ouvert depuis 2017</span>
+    <span>Réservation en ligne · sans compte</span>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.jour').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.jour').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+  document.querySelectorAll('.heure').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.heure').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+  }));
+</script>
+</body>
+</html>

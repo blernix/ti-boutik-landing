@@ -16,6 +16,11 @@ const CONTACT_ADRESSE = "contact@ti-boutik.fr";
 
 /* L'application : créer une boutique, revenir dans la sienne. */
 const APP_URL = "https://app.ti-boutik.fr";
+
+/* Les maquettes de page de réservation vivent dans public/maquettes/ : servies
+   par app.ti-boutik.fr, elles interdisent l'intégration (X-Frame-Options), donc
+   on les sert depuis la landing elle-même. */
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const LIEN_CREER = `${APP_URL}/inscription?modele=rdv`;
 const LIEN_CONNEXION = `${APP_URL}/boutique/connexion`;
 
@@ -307,52 +312,53 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 4 bis. Les habillages : même page, cinq robes. Trois ici, les cinq
-          sur /habillages-rdv. Ce sont les aperçus réels des habillages de
-          l'application (l'onglet Exemples n'existe pas encore pour le RDV). */}
+      {/* 4 bis. Les habillages : les vraies maquettes de l'application
+          (/maquettes/rdv-0X-….html), rendues en 1024 px puis réduites, comme
+          sur la page commande. Un clic ouvre la maquette en entier. */}
       <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Cinq habillages, une seule page
+              Quatre habillages, une seule page
             </h2>
             <p className="mt-3 max-w-2xl text-zinc-600">
               Mêmes prestations, mêmes créneaux, même WhatsApp. Seul
-              l&apos;habillage change : le carnet relié, la nuit tombée, la
-              plage à hauteur de sable. Vous choisissez le vôtre, et vous en
-              changez quand vous voulez.
+              l&apos;habillage change : les tresses à Pointe-à-Pitre, l&apos;onglerie
+              au Gosier, le barbier du Moule. Vous choisissez le vôtre, et vous
+              en changez quand vous voulez.
             </p>
           </FadeIn>
           <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { peau: "carnet", nom: "Carnet", note: "Papier relié, encre noire.", img: "rdv-5-carnet.png" },
-              { peau: "kannot", nom: "Kannòt", note: "La plage, à hauteur de sable.", img: "rdv-1-kannot.jpg" },
-              { peau: "zetwal", nom: "Zétwal", note: "La nuit tombée, les mains s'allument.", img: "rdv-2-zetwal.jpg" },
+              { nom: "Kannòt", fichier: "rdv-01-kannot", note: "Tresses, Pointe-à-Pitre." },
+              { nom: "Zétwal", fichier: "rdv-02-zetwal", note: "Onglerie & soins, Le Gosier." },
+              { nom: "Bwa Floté", fichier: "rdv-03-bwa-flote", note: "Atelier tresses, Sainte-Anne." },
             ].map((e, i) => (
-              <FadeIn key={e.peau} delay={i * 0.08}>
+              <FadeIn key={e.fichier} delay={i * 0.08}>
                 <a
-                  href={`/habillages-rdv#${e.peau}`}
+                  href={`${BASE}/maquettes/${e.fichier}.html`}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
-                  aria-label={`Voir l'habillage ${e.nom}`}
+                  aria-label={`Ouvrir la maquette ${e.nom} en entier`}
                 >
                   <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
                     <span className="h-2 w-2 rounded-full bg-red-300" />
                     <span className="h-2 w-2 rounded-full bg-amber-300" />
                     <span className="h-2 w-2 rounded-full bg-emerald-300" />
                     <span className="ml-2 truncate text-[10px] text-zinc-400">
-                      aperçu · {e.nom}
+                      {e.fichier}.html
                     </span>
                   </div>
-                  {/* Cadre 16/10 : les aperçus n'ont pas tous le même ratio
-                      (1280×720 pour Carnet, 900×562 pour les autres) ; le
-                      recadrage part du haut, jamais du centre. */}
-                  <div className="aspect-[16/10] overflow-hidden bg-cream">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`${APP_URL}/maquettes/apercus/${e.img}`}
-                      alt={`Aperçu de l'habillage ${e.nom}`}
+                  <div className="cadre-exemple-vue relative overflow-hidden">
+                    <iframe
+                      src={`${BASE}/maquettes/${e.fichier}.html`}
+                      title={`Maquette ${e.nom}`}
                       loading="lazy"
-                      className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.02]"
+                      scrolling="no"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                      className="absolute left-0 top-0 border-0"
                     />
                   </div>
                   <div className="border-t border-black/5 px-4 py-3">
@@ -368,19 +374,29 @@ export default function Landing() {
               href="/habillages-rdv"
               className="inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
             >
-              Voir les cinq habillages
+              Voir les quatre habillages
               <ArrowRight className="h-5 w-5" />
             </Link>
             <p className="mt-3 text-sm text-zinc-500">
-              Cinq pages de réservation de l&apos;application. Le vôtre se choisit
-              à l&apos;inscription.
+              De vraies maquettes de pages de réservation : prenez-en une en
+              entier, cliquez, ça s&apos;ouvre.
             </p>
           </FadeIn>
         </div>
         <style>{`
+          /* La maquette est rendue à 1024 px (sa mise en page d'ordinateur)
+             puis réduite d'un bloc, comme une capture — jamais recadrée. */
           .cadre-exemple { width: 333px; }
+          .cadre-exemple-vue { height: 400px; }
+          .cadre-exemple-vue iframe {
+            width: 1024px; height: 1230px;
+            transform: scale(0.325); transform-origin: top left;
+            pointer-events: none;
+          }
           @media (min-width: 640px) {
             .cadre-exemple { width: 360px; }
+            .cadre-exemple-vue { height: 420px; }
+            .cadre-exemple-vue iframe { transform: scale(0.35156); }
           }
         `}</style>
       </section>
