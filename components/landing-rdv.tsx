@@ -330,17 +330,15 @@ export default function Landing() {
           </FadeIn>
           <div className="mt-8 grid justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { nom: "Kannòt", fichier: "rdv-01-kannot", note: "Tresses, Pointe-à-Pitre." },
-              { nom: "Zétwal", fichier: "rdv-02-zetwal", note: "Onglerie & soins, Le Gosier." },
-              { nom: "Bwa Floté", fichier: "rdv-03-bwa-flote", note: "Atelier tresses, Sainte-Anne." },
+              { nom: "Kannòt", cle: "kannot", fichier: "rdv-01-kannot", note: "Tresses, Pointe-à-Pitre." },
+              { nom: "Zétwal", cle: "zetwal", fichier: "rdv-02-zetwal", note: "Onglerie & soins, Le Gosier." },
+              { nom: "Bwa Floté", cle: "bwaflote", fichier: "rdv-03-bwa-flote", note: "Atelier tresses, Sainte-Anne." },
             ].map((e, i) => (
               <FadeIn key={e.fichier} delay={i * 0.08}>
                 <a
-                  href={`${BASE}/maquettes/${e.fichier}.html`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`${BASE}/habillages-rdv#${e.cle}`}
                   className="cadre-exemple group block overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-black/10 transition hover:shadow-2xl hover:ring-emerald-700/40"
-                  aria-label={`Ouvrir la maquette ${e.nom} en entier`}
+                  aria-label={`Voir l'habillage ${e.nom} en grand`}
                 >
                   <div className="flex items-center gap-1.5 border-b border-black/5 bg-zinc-50 px-3 py-2">
                     <span className="h-2 w-2 rounded-full bg-red-300" />
@@ -378,8 +376,8 @@ export default function Landing() {
               <ArrowRight className="h-5 w-5" />
             </Link>
             <p className="mt-3 text-sm text-zinc-500">
-              De vraies maquettes de pages de réservation : prenez-en une en
-              entier, cliquez, ça s&apos;ouvre.
+              Cliquez sur une maquette : elle s&apos;ouvre en grand, avec les
+              pastilles pour passer de l&apos;une à l&apos;autre.
             </p>
           </FadeIn>
         </div>
