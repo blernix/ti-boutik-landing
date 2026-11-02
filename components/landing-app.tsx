@@ -304,7 +304,7 @@ export default function LandingApp() {
         <div className="mx-auto max-w-6xl">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Ce que vous pilotez, une fois publiée
+              Ce que vous pilotez tous les jours
             </h2>
             <p className="mt-3 max-w-2xl text-zinc-600">
               La vitrine, c&apos;est ce que le client voit. Le reste, c&apos;est
@@ -405,7 +405,7 @@ export default function LandingApp() {
         <div className="mx-auto max-w-4xl">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Une commande WhatsApp, ça vous prend combien de temps ?
+              Avant, la commande passait par votre tête
             </h2>
           </FadeIn>
           <div className="mt-8 overflow-hidden rounded-2xl ring-1 ring-black/5">
