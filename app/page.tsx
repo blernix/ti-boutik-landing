@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
-import Landing from "@/components/landing";
+import Landing from "@/components/landing-app";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: {
     absolute:
-      "Ti-Boutik — Site e-commerce & commandes WhatsApp en Guadeloupe et aux Antilles",
+      "Ti-Boutik — commandes, rendez-vous et locations pour les commerces des Antilles",
   },
   description:
-    "Boutique en ligne pour restaurants, snacks et traiteurs en Guadeloupe : les commandes arrivent déjà rédigées sur WhatsApp. 0 € pour créer, 39 €/mois pour publier, sans engagement.",
+    "Comptoir, rendez-vous, location : votre boutique prend la forme de votre métier et les demandes arrivent déjà écrites sur WhatsApp. 0 € pour créer, 39 €/mois pour publier, 0 % de commission.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title:
-      "Ti-Boutik — Site e-commerce & commandes WhatsApp en Guadeloupe et aux Antilles",
+      "Ti-Boutik — commandes, rendez-vous et locations pour les commerces des Antilles",
     description:
       "Votre boutique en ligne, les commandes déjà rédigées sur WhatsApp. 0 € pour créer, 39 €/mois pour publier.",
     url: SITE_URL,
@@ -27,7 +27,7 @@ const jsonLd = {
   name: SITE_NAME,
   url: SITE_URL,
   description:
-    "Création de mini-sites e-commerce pour les commerçants de Guadeloupe et des Antilles : catalogue en ligne, commandes et paiement via WhatsApp.",
+    "Boutiques en ligne pour les commerces de Guadeloupe et des Antilles : ventes au comptoir, rendez-vous et locations, avec la demande écrite sur WhatsApp.",
   areaServed: [
     "Guadeloupe",
     "Martinique",
