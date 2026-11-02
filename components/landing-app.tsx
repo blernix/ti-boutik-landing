@@ -6,19 +6,16 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, ChevronDown, Star } from "lucide-react";
 import { HeroPhone } from "@/components/landing-animations";
+import ApercuAdmin from "@/components/apercu-admin";
 
-/* La page d'accueil de ti-boutik.fr — deuxième version.
+/* La page d'accueil de ti-boutik.fr.
  *
- * La première ne parlait qu'aux restaurants : la moitié de l'application
- * (rendez-vous, location) n'y avait pas sa place, et l'espace commerçant —
- * ce que le client ne voit jamais — n'apparaissait nulle part. Ici :
- *  1. une promesse qui couvre les trois familles sans mentir ;
- *  2. un sélecteur qui montre à chacun sa mécanique ;
- *  3. ce que le commerçant pilote (file de commandes, carte, argent) ;
- *  4. la preuve, l'argent, les objections, les questions.
+ * Le sélecteur de métier ne change pas seulement une liste : il change la
+ * démonstration, les exemples du quotidien, l'avant/après et l'aperçu de
+ * l'espace commerçant. Un loueur de canoës ne doit jamais lire « vos plats ».
  *
  * Rien n'est affirmé qui ne soit vérifiable : 0 € pour créer, 39 €/mois à la
- * publication, 0 % de commission, sept habillages. Pas de client inventé.
+ * publication, 0 % de commission, sept habillages. Aucun client inventé.
  */
 
 const CONTACT_WHATSAPP = "https://wa.me/590691244857";
@@ -28,19 +25,43 @@ const LIEN_CONNEXION = `${APP_URL}/boutique/connexion`;
 const AVIS_GOOGLE =
   "https://www.google.com/maps/search/?api=1&query=ti-boutik&query_place_id=ChIJWyvjQw1Dh6oR2GyHPWee2k4";
 
-type Famille = "commerce" | "rdv" | "location";
+type Paire = [string, string];
 
-const FAMILLES: {
-  cle: Famille;
-  titre: string;
+type Contenu = {
+  accroche: string;
+  demo: {
+    texte: string;
+    nom: string;
+    sous: string;
+    lignes: Paire[];
+    pied: string;
+    total: string;
+    bouton: string;
+  };
+  pilotage: {
+    phrases: [string, string, string];
+    carte1: { etat: string; titre: string; sous: string; total: string; note: string; bouton: string };
+    carte2: { titre: string; lignes: Paire[]; pied: string };
+    carte3: { titre: string; montant: string; sous: string; bouton: string; pied: string };
+  };
+  avantApres: Paire[];
+};
+
+type Famille = {
+  cle: "commerce" | "rdv" | "location";
+  carte: string;
   promesse: string;
   compte: string;
   detail: string[];
   lien: { href: string; libelle: string };
-}[] = [
+  onglets: [string, string, string];
+  contenu: Contenu;
+};
+
+const FAMILLES: Famille[] = [
   {
     cle: "commerce",
-    titre: "Je vends des plats ou des produits",
+    carte: "Je vends des plats ou des produits",
     promesse: "Restaurant, snack, traiteur, épicerie.",
     compte: "Trois commandes à 15 € couvrent le mois.",
     detail: [
@@ -50,10 +71,65 @@ const FAMILLES: {
       "Paiement au retrait, ou par carte sur votre compte Stripe. Acompte possible.",
     ],
     lien: { href: "/demo", libelle: "Voir une boutique de comptoir" },
+    onglets: ["Commandes", "Ma boutique", "Paiements"],
+    contenu: {
+      accroche: "La commande arrive écrite sur WhatsApp, avec le créneau et la référence.",
+      demo: {
+        texte:
+          "Il ouvre votre boutique, voit la carte et les prix, remplit son panier et choisit son heure de retrait. La validation ouvre WhatsApp avec le récapitulatif déjà écrit.",
+        nom: "Chez Léa · Resto créole · Le Gosier",
+        sous: "Ouvert · jusqu'à 14 h",
+        lignes: [
+          ["Poulet boucané", "12,00 €"],
+          ["Accras de morue", "5,00 €"],
+          ["Jus de goyave", "3,50 €"],
+        ],
+        pied: "2 articles · retrait 12 h 30",
+        total: "17,00 €",
+        bouton: "Commander sur WhatsApp",
+      },
+      pilotage: {
+        phrases: [
+          "Vous confirmez d'un clic, le client reçoit son e-mail. Une commande entièrement payée ne se reconfirme pas — l'écran vous le dit au lieu de vous laisser cliquer.",
+          "Un prix change, un plat part : trente secondes, sans passer par moi. À zéro, l'article sort de la vitrine tout seul.",
+          "Vous voyez ce qui est encaissé et ce qui reste à régler. Pour annuler, vous remboursez l'acompte, le solde, ou les deux : si le client a payé d'avance, vous pouvez garder l'acompte.",
+        ],
+        carte1: {
+          etat: "À confirmer",
+          titre: "Client · 2 articles",
+          sous: "Aujourd'hui, retrait 12 h 30",
+          total: "Total 50,00 €",
+          note: "Acompte 10,00 € reçu · reste 40,00 €",
+          bouton: "Confirmer la commande",
+        },
+        carte2: {
+          titre: "Ma carte",
+          lignes: [
+            ["Poulet boucané", "12,00 €"],
+            ["Accras de morue", "5,00 €"],
+            ["Jus de goyave", "3,50 €"],
+          ],
+          pied: "En rupture : l'article sort de la vitrine",
+        },
+        carte3: {
+          titre: "Argent reçu",
+          montant: "10,00 € encaissés",
+          sous: "Reste à régler au retrait : 40,00 €",
+          bouton: "Rembourser l'acompte · 10,00 €",
+          pied: "Le solde n'est pas encore encaissé : rien à rembourser.",
+        },
+      },
+      avantApres: [
+        ["« C'est combien le poulet ? » — vous répondez six fois par jour", "Il voit votre carte, vos prix, vos options"],
+        ["Vous recopiez la commande, vous oubliez la sauce", "Le récapitulatif arrive écrit, avec la référence"],
+        ["Vous cherchez le message dans quarante conversations", "Chaque commande a sa référence"],
+        ["Un client qui ne vous connaît pas ne vous trouve pas", "Votre boutique s'affiche sur son téléphone"],
+      ],
+    },
   },
   {
     cle: "rdv",
-    titre: "Je reçois sur rendez-vous",
+    carte: "Je reçois sur rendez-vous",
     promesse: "Coiffeur, barbier, onglerie, soins, réparation.",
     compte: "Deux rendez-vous à 25 € couvrent le mois.",
     detail: [
@@ -63,10 +139,65 @@ const FAMILLES: {
       "Un QR code à coller au salon, ou le lien dans votre bio.",
     ],
     lien: { href: "/rendez-vous", libelle: "Voir la version rendez-vous" },
+    onglets: ["Rendez-vous", "Ma boutique", "Paiements"],
+    contenu: {
+      accroche: "Le rendez-vous se pose dans votre carnet, pas dans une conversation.",
+      demo: {
+        texte:
+          "Il voit les prestations, les durées et les créneaux encore libres, choisit son heure. La validation ouvre WhatsApp avec la demande déjà écrite — vous n'avez plus qu'à dire oui.",
+        nom: "Kannot · Salon · Le Gosier",
+        sous: "Ouvert · dernier créneau 17 h 30",
+        lignes: [
+          ["Tresses longues · 1 h 30", "45,00 €"],
+          ["Coupe + barbe · 45 min", "30,00 €"],
+          ["Coloration · 2 h", "60,00 €"],
+        ],
+        pied: "Jeudi 14 h 30 · 1 h 30",
+        total: "45,00 €",
+        bouton: "Réserver ce créneau",
+      },
+      pilotage: {
+        phrases: [
+          "La demande arrive avec la prestation, la durée, l'heure — et sa référence. Vous confirmez, il reçoit son e-mail. Un créneau déjà réservé ne peut plus l'être.",
+          "Une prestation change de prix ou de durée en trente secondes. Un congé bloque les créneaux d'avance, sans toucher au reste.",
+          "L'acompte reçu se rembourse sur le bon paiement, pas sur le voisin. Le solde se règle au salon : rien à rembourser puisqu'il n'est pas encaissé.",
+        ],
+        carte1: {
+          etat: "À confirmer",
+          titre: "Léa M. · Tresses longues",
+          sous: "Jeudi 14 h 30 · 1 h 30",
+          total: "Total 45,00 €",
+          note: "Paiement au salon · aucun acompte",
+          bouton: "Confirmer le rendez-vous",
+        },
+        carte2: {
+          titre: "Mes prestations",
+          lignes: [
+            ["Tresses · 1 h 30", "45,00 €"],
+            ["Coupe + barbe · 45 min", "30,00 €"],
+            ["Coloration · 2 h", "60,00 €"],
+          ],
+          pied: "Congé d'août bloqué à l'avance",
+        },
+        carte3: {
+          titre: "Acomptes reçus",
+          montant: "45,00 € reçus d'avance",
+          sous: "Reste à régler au salon : 0,00 €",
+          bouton: "Rembourser l'acompte · 45,00 €",
+          pied: "Le client annule ? Le créneau se libère tout seul.",
+        },
+      },
+      avantApres: [
+        ["Le téléphone sonne au milieu d'une coupe", "Le client voit les créneaux libres et réserve"],
+        ["« Jeudi 14 h » noté sur un carnet, une main dans les cheveux", "Le rendez-vous est écrit, avec la durée"],
+        ["Deux clientes arrivent sur le même créneau", "Un créneau réservé ne peut plus l'être"],
+        ["Vous rappelez la veille, cliente par cliente", "Le rappel part tout seul"],
+      ],
+    },
   },
   {
     cle: "location",
-    titre: "Je loue un bien, un gîte, une intervention",
+    carte: "Je loue un bien, un gîte, une intervention",
     promesse: "Canoë, vélo, engin, logement, chantier.",
     compte: "Une location de 50 € couvre le mois.",
     detail: [
@@ -76,39 +207,69 @@ const FAMILLES: {
       "Caution notée, solde réclamé avant l'arrivée, acompte si vous voulez.",
     ],
     lien: { href: "/habillages-rdv", libelle: "Voir un exemple de location" },
+    onglets: ["Locations", "Ma boutique", "Paiements"],
+    contenu: {
+      accroche: "Les dates libres se voient, le prix se calcule, le planning se remplit sans vous.",
+      demo: {
+        texte:
+          "Il voit ce qui est libre sur ses dates, le prix se calcule selon la durée, la caution est affichée. La validation ouvre WhatsApp avec la réservation écrite.",
+        nom: "Kanoé Kreyol · Location · Le Gosier",
+        sous: "Ouvert · retrait à 8 h",
+        lignes: [
+          ["Canoë 2 places · 30 €/jour", "90,00 €"],
+          ["Paddle · 20 €/jour", "60,00 €"],
+          ["Kayak 2 places · 25 €/jour", "75,00 €"],
+        ],
+        pied: "12 → 15 août · 3 jours",
+        total: "90,00 €",
+        bouton: "Réserver ces dates",
+      },
+      pilotage: {
+        phrases: [
+          "La demande porte les dates, le bien et la référence. Vous confirmez, le planning se remplit : un bien et une date ne peuvent plus être loués deux fois.",
+          "Un bien passe en rupture, un tarif change de période : vous le faites depuis le téléphone. Plus un exemplaire de libre, il sort de la vitrine.",
+          "L'acompte est encaissé à la réservation, le solde réclamé avant l'arrivée, la caution seulement notée — aucun argent bloqué. L'annulation rembourse l'acompte, le solde, ou les deux.",
+        ],
+        carte1: {
+          etat: "À confirmer",
+          titre: "Kévin R. · 2 canoës",
+          sous: "12 → 15 août · 3 jours",
+          total: "Total 90,00 €",
+          note: "Caution 100 € notée · solde avant l'arrivée",
+          bouton: "Confirmer la réservation",
+        },
+        carte2: {
+          titre: "Mes biens",
+          lignes: [
+            ["Canoë · 30 €/jour", "6 libres"],
+            ["Paddle · 20 €/jour", "4 libres"],
+            ["Kayak · 25 €/jour", "0 libre"],
+          ],
+          pied: "Plus rien de libre : sorti de la vitrine",
+        },
+        carte3: {
+          titre: "Acomptes reçus",
+          montant: "30,00 € d'acompte",
+          sous: "Solde 60,00 € réclamé le 9 août",
+          bouton: "Rembourser l'acompte · 30,00 €",
+          pied: "La caution n'est jamais bloquée : elle est notée.",
+        },
+      },
+      avantApres: [
+        ["« C'est libre le 14 ? » — vous vérifiez dans trois carnets", "Le planning montre ce qui est pris"],
+        ["Le même canoë loué deux fois le 14", "Un bien et une date ne se réservent qu'une fois"],
+        ["Vous calculez à la main : 3 jours, deux canoës", "Le prix se calcule avec les dates"],
+        ["Vous courez après le solde à l'arrivée", "Le solde est réclamé avant, tout seul"],
+      ],
+    },
   },
-];
-
-const PILOTAGE: { titre: string; texte: string }[] = [
-  {
-    titre: "La file de commandes",
-    texte:
-      "Vous confirmez d'un clic, le client reçoit son e-mail. Une commande entièrement payée ne se reconfirme pas — l'écran vous le dit au lieu de vous laisser cliquer.",
-  },
-  {
-    titre: "Votre carte, depuis votre téléphone",
-    texte:
-      "Un prix change, un plat part : trente secondes, sans passer par moi. À zéro, l'article sort de la vitrine tout seul.",
-  },
-  {
-    titre: "L'argent",
-    texte:
-      "Vous voyez ce qui est encaissé et ce qui reste à régler. Pour annuler, vous remboursez l'acompte, le solde, ou les deux : si le client a payé d'avance, vous pouvez garder l'acompte.",
-  },
-];
-
-const AVANT_APRES: [string, string][] = [
-  ["« C'est combien le poulet ? » — vous répondez six fois par jour", "Il voit votre carte, vos prix, vos options"],
-  ["Vous recopiez la commande, vous oubliez la sauce", "Le récapitulatif arrive écrit, avec la référence"],
-  ["Vous cherchez le message dans quarante conversations", "Chaque commande a sa référence"],
-  ["Un client qui ne vous connaît pas ne vous trouve pas", "Votre boutique s'affiche sur son téléphone"],
 ];
 
 const INCLUS = [
   "Votre adresse votrenom.ti-boutik.fr",
   "Carte, prestations ou biens, photos illimitées",
   "Stock, options, créneaux, horaires",
-  "Commande écrite sur WhatsApp, avec référence",
+  "Demande écrite sur WhatsApp, avec référence",
   "Paiement par carte sur votre compte Stripe",
   "Page prête pour Google : horaires, adresse, menu",
 ];
@@ -136,10 +297,10 @@ const OBJECTIONS = [
   },
 ];
 
-const FAQ: { q: string; a: string; lien?: { href: string; texte: string } }[] = [
+const FAQ: { q: string; a: string }[] = [
   {
     q: "Combien ça coûte ?",
-    a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez — ou 390 € par an, deux mois offerts. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, comme sur tout paiement par carte.",
+    a: "0 € pour créer, puis 39 € par mois seulement quand vous publiez — ou 390 € par an, deux mois offerts. Sans engagement, résiliable en un clic. Aucune commission sur vos ventes : seuls les frais bancaires de Stripe s'appliquent, sur votre propre compte.",
   },
   {
     q: "Est-ce que ça marche pour mon métier ?",
@@ -160,11 +321,12 @@ const FAQ: { q: string; a: string; lien?: { href: string; texte: string } }[] = 
 ];
 
 export default function LandingApp() {
-  const [famille, setFamille] = useState<Famille>("commerce");
+  const [famille, setFamille] = useState<Famille["cle"]>("commerce");
   const active = FAMILLES.find((f) => f.cle === famille) ?? FAMILLES[0];
+  const c = active.contenu;
 
   return (
-    <div className="min-h-screen bg-cream pb-14 text-foreground sm:pb-0">
+    <div className="min-h-screen bg-cream pb-24 text-foreground sm:pb-0">
       <Header />
 
       {/* 1 — Hero */}
@@ -188,10 +350,8 @@ export default function LandingApp() {
             </FadeIn>
             <FadeIn delay={0.1}>
               <p className="mx-auto mt-5 max-w-xl text-lg text-emerald-50/90 lg:mx-0">
-                Un snack n&apos;a pas besoin d&apos;un carnet de rendez-vous, un
-                salon n&apos;a pas besoin d&apos;un panier. Ici la boutique prend
-                la forme de votre métier, et la demande arrive écrite sur
-                WhatsApp : nom, articles ou dates, créneau, référence.{" "}
+                La boutique prend la forme de votre métier, et la demande arrive
+                écrite : nom, articles ou dates, créneau, référence.{" "}
                 <span className="font-semibold text-white">
                   0 % de commission sur la vente.
                 </span>
@@ -244,14 +404,14 @@ export default function LandingApp() {
       </section>
 
       {/* 3 — Sélecteur de métier */}
-      <section id="metier" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+      <section id="metier" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:py-16">
         <FadeIn>
           <h2 className="text-3xl font-extrabold tracking-tight">
             Quelle est votre façon de vendre ?
           </h2>
           <p className="mt-3 max-w-2xl text-zinc-600">
-            Trois façons de vendre, un seul outil. Cliquez sur la vôtre : la
-            suite de la page parle votre langue.
+            Trois façons de vendre, un seul outil. Cliquez sur la vôtre : la page
+            entière change de mots, d&apos;exemples et d&apos;écrans.
           </p>
         </FadeIn>
 
@@ -270,18 +430,17 @@ export default function LandingApp() {
                     : "border-black/10 bg-white/60 hover:border-emerald-700/40 hover:bg-white"
                 }`}
               >
-                <p className="text-[15px] font-extrabold leading-snug">{f.titre}</p>
+                <p className="text-[15px] font-extrabold leading-snug">{f.carte}</p>
                 <p className="mt-1 text-[13px] text-zinc-500">{f.promesse}</p>
-                <p className="mt-3 text-[13px] font-semibold text-emerald-800">
-                  {f.compte}
-                </p>
+                <p className="mt-3 text-[13px] font-semibold text-emerald-800">{f.compte}</p>
               </button>
             );
           })}
         </div>
 
         <FadeIn key={active.cle} className="mt-6 rounded-2xl bg-white p-6 ring-1 ring-black/5">
-          <ul className="grid gap-2.5 sm:grid-cols-2">
+          <p className="text-[15px] font-bold text-emerald-900">{c.accroche}</p>
+          <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
             {active.detail.map((d) => (
               <li key={d} className="flex items-start gap-2 text-[14.5px] text-zinc-700">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
@@ -300,7 +459,7 @@ export default function LandingApp() {
       </section>
 
       {/* 4 — Ce que le commerçant pilote */}
-      <section id="piloter" className="border-t border-black/5 bg-white px-4 py-16 sm:py-20">
+      <section id="piloter" className="scroll-mt-20 border-t border-black/5 bg-white px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-6xl">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
@@ -308,8 +467,7 @@ export default function LandingApp() {
             </h2>
             <p className="mt-3 max-w-2xl text-zinc-600">
               La vitrine, c&apos;est ce que le client voit. Le reste, c&apos;est
-              vous : les commandes du jour, la carte, l&apos;argent. Depuis votre
-              téléphone, entre deux services.
+              vous. Depuis votre téléphone, entre deux services.
             </p>
             <p className="mt-2 text-[11.5px] uppercase tracking-wide text-zinc-400">
               Aperçus de l&apos;espace commerçant, avec les phrases qu&apos;il
@@ -317,17 +475,57 @@ export default function LandingApp() {
             </p>
           </FadeIn>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
-            <ApercuCommandes />
-            <ApercuCatalogue />
-            <ApercuArgent />
+          <div className="mx-auto mt-8 max-w-2xl">
+            <ApercuAdmin
+              nomBoutique={c.demo.nom.split(" · ")[0]}
+              libelles={active.onglets}
+              onglets={[
+                {
+                  titre: "Commandes",
+                  sous: c.pilotage.carte1.etat,
+                  lignes: [
+                    [c.pilotage.carte1.titre, ""],
+                    [c.pilotage.carte1.sous, ""],
+                  ],
+                  total: c.pilotage.carte1.total,
+                  note: c.pilotage.carte1.note,
+                  action: c.pilotage.carte1.bouton,
+                  actionFaite: "le client a reçu son e-mail",
+                  pied: "",
+                },
+                {
+                  titre: c.pilotage.carte2.titre,
+                  sous: "",
+                  lignes: c.pilotage.carte2.lignes,
+                  total: "",
+                  note: "",
+                  action: "",
+                  actionFaite: "",
+                  pied: "",
+                },
+                {
+                  titre: "Paiements",
+                  sous: "",
+                  lignes: [[c.pilotage.carte3.montant, ""]],
+                  total: "",
+                  note: c.pilotage.carte3.sous,
+                  action: c.pilotage.carte3.bouton,
+                  actionFaite: "remboursé, le client est prévenu",
+                  pied: c.pilotage.carte3.pied,
+                },
+              ]}
+            />
           </div>
 
           <div className="mt-6 grid gap-5 lg:grid-cols-3">
-            {PILOTAGE.map((p) => (
-              <div key={p.titre}>
-                <h3 className="text-[15px] font-extrabold">{p.titre}</h3>
-                <p className="mt-1.5 text-[13.5px] leading-relaxed text-zinc-600">{p.texte}</p>
+            {[
+              ["La demande qui arrive", c.pilotage.phrases[0]],
+              ["Ce que vous modifiez seul", c.pilotage.phrases[1]],
+              ["L'argent", c.pilotage.phrases[2]],
+            ].map(([titre, texte]) => (
+              <div key={titre}>
+                <h3 className="text-[15px] font-extrabold">{titre}</h3>
+                <p className="mt-1.5 text-[13.5px] leading-relaxed text-zinc-600">{texte}</p>
               </div>
             ))}
           </div>
@@ -335,17 +533,13 @@ export default function LandingApp() {
       </section>
 
       {/* 5 — Démo */}
-      <section id="demo" className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+      <section id="demo" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:py-16">
         <div className="grid items-center gap-10 lg:grid-cols-2">
-          <FadeIn>
+          <FadeIn key={`${active.cle}-demo`}>
             <h2 className="text-3xl font-extrabold tracking-tight">
               Regardez-la comme votre client la verra
             </h2>
-            <p className="mt-3 text-zinc-600">
-              Il ouvre votre boutique sur son téléphone, voit la carte et les prix,
-              remplit son panier. La validation ouvre WhatsApp avec le
-              récapitulatif déjà écrit.
-            </p>
+            <p className="mt-3 text-zinc-600">{c.demo.texte}</p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/demo"
@@ -369,16 +563,10 @@ export default function LandingApp() {
             <div className="w-full max-w-sm rounded-[2rem] bg-white p-4 shadow-xl ring-1 ring-black/5">
               <div className="rounded-2xl bg-cream p-4">
                 <p className="text-[11px] font-bold uppercase tracking-[.14em] text-emerald-800">
-                  Chez Léa · Resto créole · Le Gosier
+                  {c.demo.nom}
                 </p>
-                <p className="mt-1 text-[11px] font-semibold text-emerald-700">
-                  Ouvert · jusqu&apos;à 14 h
-                </p>
-                {[
-                  ["Poulet boucané", "12,00 €"],
-                  ["Accras de morue", "5,00 €"],
-                  ["Jus de goyave", "3,50 €"],
-                ].map(([nom, prix]) => (
+                <p className="mt-1 text-[11px] font-semibold text-emerald-700">{c.demo.sous}</p>
+                {c.demo.lignes.map(([nom, prix]) => (
                   <div
                     key={nom}
                     className="mt-3 flex items-center justify-between border-b border-black/5 pb-2 text-[13px]"
@@ -388,11 +576,11 @@ export default function LandingApp() {
                   </div>
                 ))}
                 <div className="mt-3 flex items-center justify-between text-[13px] font-bold">
-                  <span>2 articles</span>
-                  <span>17,00 €</span>
+                  <span>{c.demo.pied}</span>
+                  <span>{c.demo.total}</span>
                 </div>
                 <p className="mt-3 rounded-xl bg-wa px-3 py-2 text-center text-[12.5px] font-bold text-white">
-                  Commander sur WhatsApp
+                  {c.demo.bouton}
                 </p>
               </div>
             </div>
@@ -401,21 +589,19 @@ export default function LandingApp() {
       </section>
 
       {/* 6 — Avant / après */}
-      <section id="probleme" className="border-t border-black/5 bg-white px-4 py-16 sm:py-20">
+      <section id="probleme" className="scroll-mt-20 border-t border-black/5 bg-white px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-4xl">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Avant, la commande passait par votre tête
+              Avant, ça passait par votre tête
             </h2>
           </FadeIn>
-          <div className="mt-8 overflow-hidden rounded-2xl ring-1 ring-black/5">
+          <div key={`${active.cle}-aa`} className="mt-8 overflow-hidden rounded-2xl ring-1 ring-black/5">
             <div className="grid grid-cols-2 bg-zinc-100 text-[11px] font-bold uppercase tracking-[.12em] text-zinc-500">
               <p className="px-4 py-2.5">Aujourd&apos;hui</p>
-              <p className="border-l border-black/5 px-4 py-2.5 text-emerald-800">
-                Avec Ti-Boutik
-              </p>
+              <p className="border-l border-black/5 px-4 py-2.5 text-emerald-800">Avec Ti-Boutik</p>
             </div>
-            {AVANT_APRES.map(([avant, apres]) => (
+            {c.avantApres.map(([avant, apres]) => (
               <div key={avant} className="grid grid-cols-2 border-t border-black/5 bg-white">
                 <p className="px-4 py-3 text-[13.5px] text-zinc-600">{avant}</p>
                 <p className="border-l border-black/5 px-4 py-3 text-[13.5px] font-semibold text-emerald-900">
@@ -425,22 +611,22 @@ export default function LandingApp() {
             ))}
           </div>
           <p className="mt-4 text-sm text-zinc-500">
-            Rien ne change pour vos habitudes : les commandes continuent
-            d&apos;arriver dans votre WhatsApp.
+            Rien ne change pour vos habitudes : les demandes continuent d&apos;arriver
+            dans votre WhatsApp.
           </p>
         </div>
       </section>
 
       {/* 7 — Habillages */}
-      <section id="habillages" className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
+      <section id="habillages" className="scroll-mt-20 border-t border-black/5 bg-cream px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-4xl text-center">
           <FadeIn>
             <h2 className="text-3xl font-extrabold tracking-tight">
               La même maison, sept habillages
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
-              Même carte, mêmes photos, même panier. Seul l&apos;habillage change :
-              le comptoir d&apos;avant, le papier crème, la table du bistrot. Vous
+              Même contenu, même mécanique. Seul l&apos;habillage change : le
+              comptoir d&apos;avant, le papier crème, la table du bistrot. Vous
               choisissez le vôtre, et vous en changez quand vous voulez.
             </p>
             <Link
@@ -455,7 +641,7 @@ export default function LandingApp() {
       </section>
 
       {/* 8 — Prix */}
-      <section id="tarif" className="mx-auto max-w-3xl px-4 py-16 sm:py-20">
+      <section id="tarif" className="scroll-mt-20 mx-auto max-w-3xl px-4 py-14 sm:py-16">
         <FadeIn>
           <h2 className="text-3xl font-extrabold tracking-tight">
             39 €/mois. Le mois se paie avec deux ou trois ventes de plus.
@@ -479,9 +665,8 @@ export default function LandingApp() {
             </ul>
             <div className="mt-6 space-y-1.5 rounded-2xl bg-cream p-4 text-[13px] text-zinc-700">
               {FAMILLES.map((f) => (
-                <p key={f.cle}>
-                  <span className="font-bold">{f.promesse.split(".")[0]} :</span>{" "}
-                  {f.compte}
+                <p key={f.cle} className={f.cle === active.cle ? "font-bold text-emerald-900" : ""}>
+                  {f.promesse.split(".")[0]} : {f.compte}
                 </p>
               ))}
             </div>
@@ -504,12 +689,10 @@ export default function LandingApp() {
       </section>
 
       {/* 9 — Objections */}
-      <section className="border-t border-black/5 bg-white px-4 py-16 sm:py-20">
+      <section className="border-t border-black/5 bg-white px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-4xl">
           <FadeIn>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              Vous vous dites peut-être…
-            </h2>
+            <h2 className="text-3xl font-extrabold tracking-tight">Vous vous dites peut-être…</h2>
           </FadeIn>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             {OBJECTIONS.map((o) => (
@@ -523,7 +706,7 @@ export default function LandingApp() {
       </section>
 
       {/* 10 — Preuve et fondateur */}
-      <section className="border-t border-black/5 bg-cream px-4 py-16 sm:py-20">
+      <section className="border-t border-black/5 bg-cream px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-3xl">
           <FadeIn>
             <h2 className="text-center text-2xl font-extrabold tracking-tight">
@@ -544,12 +727,11 @@ export default function LandingApp() {
             </ul>
             <div className="mt-8 rounded-2xl bg-white p-6 ring-1 ring-black/5">
               <p className="text-[14.5px] leading-relaxed text-zinc-700">
-                Je m&apos;appelle Killian, je développe des sites pour des
-                commerces guadeloupéens. Ti-Boutik, c&apos;est mon outil : je le
-                fais tourner, je réponds moi-même sur WhatsApp, et je corrige ce
-                qui bloque. Avant, j&apos;ai fait tablemaster.fr, un logiciel de
-                réservation pour les restaurants, sans commission sur les
-                couverts.
+                Je m&apos;appelle Killian, je développe des sites pour des commerces
+                guadeloupéens. Ti-Boutik, c&apos;est mon outil : je le fais tourner,
+                je réponds moi-même sur WhatsApp, et je corrige ce qui bloque.
+                Avant, j&apos;ai fait tablemaster.fr, un logiciel de réservation pour
+                les restaurants, sans commission sur les couverts.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
                 <span className="flex items-center gap-1.5 font-bold text-zinc-900">
@@ -571,15 +753,13 @@ export default function LandingApp() {
       </section>
 
       {/* 11 — FAQ */}
-      <section id="faq" className="mx-auto max-w-2xl px-4 py-16 sm:py-20">
+      <section id="faq" className="scroll-mt-20 mx-auto max-w-2xl px-4 py-14 sm:py-16">
         <FadeIn>
-          <h2 className="text-3xl font-extrabold tracking-tight">
-            Questions fréquentes
-          </h2>
+          <h2 className="text-3xl font-extrabold tracking-tight">Questions fréquentes</h2>
         </FadeIn>
         <div className="mt-8 space-y-2">
           {FAQ.map((item) => (
-            <FaqItem key={item.q} {...item} />
+            <FaqItem key={item.q} q={item.q} a={item.a} />
           ))}
         </div>
       </section>
@@ -587,7 +767,7 @@ export default function LandingApp() {
       {/* 12 — Appel final */}
       <section
         id="contact"
-        className="bg-gradient-to-br from-emerald-900 to-teal-900 px-4 py-16 text-center text-white sm:py-20"
+        className="bg-gradient-to-br from-emerald-900 to-teal-900 px-4 py-14 text-center text-white sm:py-16"
       >
         <div className="mx-auto max-w-2xl">
           <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -626,88 +806,6 @@ export default function LandingApp() {
   );
 }
 
-/* ---------- L'espace commerçant, en trois aperçus ---------- */
-
-function CadreApercu({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl bg-cream p-3.5 ring-1 ring-black/5">
-      <div className="rounded-xl bg-white p-4 shadow-sm">{children}</div>
-    </div>
-  );
-}
-
-function ApercuCommandes() {
-  return (
-    <CadreApercu>
-      <div className="flex items-center justify-between">
-        <p className="text-[12px] font-extrabold uppercase tracking-wide text-zinc-500">
-          À confirmer
-        </p>
-        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800">
-          1
-        </span>
-      </div>
-      <p className="mt-2 text-[14px] font-extrabold">Client · 2 articles</p>
-      <p className="text-[12.5px] text-zinc-500">Aujourd&apos;hui, retrait 12 h 30</p>
-      <p className="mt-2 text-[13px] font-semibold">Total 50,00 €</p>
-      <p className="mt-1 inline-block rounded-lg bg-cream px-2 py-1 text-[11.5px] font-semibold text-zinc-600">
-        Acompte 10,00 € reçu · reste 40,00 €
-      </p>
-      <p className="mt-3 rounded-lg bg-emerald-700 px-3 py-2 text-center text-[12.5px] font-bold text-white">
-        Confirmer la commande
-      </p>
-    </CadreApercu>
-  );
-}
-
-function ApercuCatalogue() {
-  return (
-    <CadreApercu>
-      <p className="text-[12px] font-extrabold uppercase tracking-wide text-zinc-500">
-        Ma carte
-      </p>
-      {[
-        ["Poulet boucané", "12,00 €", true],
-        ["Accras de morue", "5,00 €", true],
-        ["Jus de goyave", "3,50 €", false],
-      ].map(([nom, prix, dispo]) => (
-        <div
-          key={String(nom)}
-          className="mt-2.5 flex items-center justify-between border-b border-black/5 pb-2 last:border-0"
-        >
-          <span className="text-[13px] font-semibold">{nom}</span>
-          <span className="flex items-center gap-2">
-            <span className="text-[12.5px] text-zinc-500">{prix}</span>
-            <span
-              className={`h-2 w-2 rounded-full ${dispo ? "bg-emerald-600" : "bg-zinc-300"}`}
-            />
-          </span>
-        </div>
-      ))}
-      <p className="mt-3 rounded-lg bg-cream px-3 py-2 text-center text-[12px] font-semibold text-zinc-600">
-        En rupture : l&apos;article sort de la vitrine
-      </p>
-    </CadreApercu>
-  );
-}
-
-function ApercuArgent() {
-  return (
-    <CadreApercu>
-      <p className="text-[12px] font-extrabold uppercase tracking-wide text-zinc-500">
-        Argent reçu
-      </p>
-      <p className="mt-2 text-[14px] font-extrabold">10,00 € encaissés</p>
-      <p className="text-[12.5px] text-zinc-500">Reste à régler au retrait : 40,00 €</p>
-      <p className="mt-3 rounded-lg border border-zinc-200 px-3 py-2 text-center text-[12px] font-bold text-zinc-700">
-        Rembourser l&apos;acompte · 10,00 €
-      </p>
-      <p className="mt-2 rounded-lg bg-cream px-3 py-2 text-center text-[11.5px] font-semibold text-zinc-600">
-        Le solde n&apos;est pas encore encaissé : rien à rembourser.
-      </p>
-    </CadreApercu>
-  );
-}
 
 /* ---------- Coquille ---------- */
 
@@ -813,15 +911,7 @@ function MobileContactBar() {
   );
 }
 
-function FaqItem({
-  q,
-  a,
-  lien,
-}: {
-  q: string;
-  a: string;
-  lien?: { href: string; texte: string };
-}) {
+function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="overflow-hidden rounded-2xl bg-white ring-1 ring-black/5">
@@ -832,9 +922,7 @@ function FaqItem({
       >
         <span className="font-bold">{q}</span>
         <ChevronDown
-          className={`h-5 w-5 shrink-0 text-zinc-500 transition-transform ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`h-5 w-5 shrink-0 text-zinc-500 transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
       <motion.div
@@ -843,18 +931,7 @@ function FaqItem({
         transition={{ duration: 0.25, ease: "easeInOut" }}
         className="overflow-hidden"
       >
-        <p className="px-5 pb-4 text-[14px] leading-relaxed text-zinc-600">
-          {a}
-          {lien && (
-            <>
-              {" "}
-              <Link href={lien.href} className="font-semibold underline underline-offset-4">
-                {lien.texte}
-              </Link>
-              .
-            </>
-          )}
-        </p>
+        <p className="px-5 pb-4 text-[14px] leading-relaxed text-zinc-600">{a}</p>
       </motion.div>
     </div>
   );
