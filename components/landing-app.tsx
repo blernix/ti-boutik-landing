@@ -412,13 +412,13 @@ export default function LandingApp() {
                       className={`flex flex-1 flex-col items-center justify-center rounded-xl px-1.5 py-2 transition ${
                         choisi
                           ? "bg-white text-emerald-900 shadow-sm"
-                          : "text-emerald-50/80 hover:bg-white/10 hover:text-white"
+                          : "text-emerald-50/95 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       <span className="text-[12.5px] font-extrabold sm:text-sm">{f.bouton}</span>
                       <span
                         className={`mt-0.5 text-[10px] font-semibold ${
-                          choisi ? "text-emerald-700" : "text-emerald-100/60"
+                          choisi ? "text-emerald-700" : "text-emerald-100/80"
                         }`}
                       >
                         {f.qualificatif}
@@ -452,7 +452,7 @@ export default function LandingApp() {
               <div className="mt-5">
                 <a
                   href={LIEN_CREER}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:mx-auto sm:w-auto lg:mx-0"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:inline-flex sm:w-auto"
                 >
                   Créer ma boutique
                   <ArrowRight className="h-5 w-5" />
