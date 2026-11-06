@@ -36,9 +36,6 @@ type Contenu = {
      ce qui fait qu'un loueur ne lit jamais « vos plats ». Le titre porte un
      mot entre **étoiles** : il est rendu dans la couleur WhatsApp. */
   hero: { titre: string; sousTitre: string };
-  /* Message déjà écrit dans WhatsApp quand il clique « je vous la crée » :
-     Killian sait qui écrit et pour quoi, sans poser de question. */
-  messageWa: string;
   accroche: string;
   demo: {
     texte: string;
@@ -97,8 +94,6 @@ const FAMILLES: Famille[] = [
         sousTitre:
           "Carte, prix, options, stock. Il commande, vous recevez la référence.",
       },
-      messageWa:
-        "Bonjour Killian, je vends des plats et des produits. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "La commande arrive écrite sur WhatsApp, avec le créneau et la référence.",
       demo: {
         texte:
@@ -175,8 +170,6 @@ const FAMILLES: Famille[] = [
         sousTitre:
           "Prestations, durées, créneaux. Il réserve, vous confirmez d'un clic.",
       },
-      messageWa:
-        "Bonjour Killian, je reçois sur rendez-vous. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "Le rendez-vous se pose dans votre carnet, pas dans une conversation.",
       demo: {
         texte:
@@ -253,8 +246,6 @@ const FAMILLES: Famille[] = [
         sousTitre:
           "Dates, prix calculé, caution notée. Il réserve, le planning se remplit.",
       },
-      messageWa:
-        "Bonjour Killian, je loue des biens. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "Les dates libres se voient, le prix se calcule, le planning se remplit sans vous.",
       demo: {
         texte:
@@ -329,7 +320,7 @@ const OBJECTIONS = [
   {
     titre: "« Je ne suis pas doué en informatique. »",
     texte:
-      "Rien à installer, rien à mettre à jour. Si vous bloquez, je le fais avec vous sur WhatsApp.",
+      "Rien à installer, rien à mettre à jour : tout se fait depuis votre téléphone, et chaque écran dit quoi faire. Si vous bloquez, écrivez-moi sur WhatsApp — je réponds moi-même.",
   },
   {
     titre: "« Mes clients commandent déjà sur WhatsApp. »",
@@ -454,17 +445,6 @@ export default function LandingApp() {
                 <p className="mt-1 text-[12px] text-emerald-100/70">
                   0 € pour créer · aucune commission · vous ne payez qu&apos;à la
                   publication
-                </p>
-                <p className="mt-3 text-[13px] text-emerald-100/80">
-                  ou{" "}
-                  <a
-                    href={`${CONTACT_WHATSAPP}?text=${encodeURIComponent(c.messageWa)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline decoration-emerald-300/50 underline-offset-4 transition hover:text-white"
-                  >
-                    je vous la crée en 10 minutes sur WhatsApp
-                  </a>
                 </p>
               </div>
             </FadeIn>

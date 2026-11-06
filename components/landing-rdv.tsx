@@ -91,7 +91,7 @@ const OBJECTIONS = [
   {
     titre: "« Je ne suis pas doué en informatique. »",
     texte:
-      "Rien à installer, rien à mettre à jour. Si vous bloquez, je le fais avec vous sur WhatsApp.",
+      "Rien à installer, rien à mettre à jour : tout se fait depuis votre téléphone, et chaque écran dit quoi faire. Si vous bloquez, écrivez-moi sur WhatsApp — je réponds moi-même.",
   },
 ];
 
