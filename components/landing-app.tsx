@@ -5,7 +5,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, ChevronDown, Star } from "lucide-react";
-import { HeroPhone } from "@/components/landing-animations";
+import {
+  HeroPhone,
+  HeroPhoneLocation,
+  HeroPhoneRdv,
+} from "@/components/landing-animations";
 import ApercuAdmin from "@/components/apercu-admin";
 
 /* La page d'accueil de ti-boutik.fr.
@@ -28,6 +32,13 @@ const AVIS_GOOGLE =
 type Paire = [string, string];
 
 type Contenu = {
+  /* Les deux phrases du premier écran. Elles changent avec le métier : c'est
+     ce qui fait qu'un loueur ne lit jamais « vos plats ». Le titre porte un
+     mot entre **étoiles** : il est rendu dans la couleur WhatsApp. */
+  hero: { titre: string; sousTitre: string };
+  /* Message déjà écrit dans WhatsApp quand il clique « je vous la crée » :
+     Killian sait qui écrit et pour quoi, sans poser de question. */
+  messageWa: string;
   accroche: string;
   demo: {
     texte: string;
@@ -49,6 +60,11 @@ type Contenu = {
 
 type Famille = {
   cle: "commerce" | "rdv" | "location";
+  /* Le premier écran ne peut pas afficher trois fois « Je vends des plats ou
+     des produits » : trois boutons courts, un verbe que le commerçant se dit,
+     et un qualificatif qui nomme ce qu'il vend. */
+  bouton: string;
+  qualificatif: string;
   carte: string;
   promesse: string;
   compte: string;
@@ -61,6 +77,8 @@ type Famille = {
 const FAMILLES: Famille[] = [
   {
     cle: "commerce",
+    bouton: "Je vends",
+    qualificatif: "plats, produits",
     carte: "Je vends des plats ou des produits",
     promesse: "Restaurant, snack, traiteur, épicerie.",
     compte: "Trois commandes à 15 € couvrent le mois.",
@@ -73,6 +91,14 @@ const FAMILLES: Famille[] = [
     lien: { href: "/demo", libelle: "Voir une boutique de comptoir" },
     onglets: ["Commandes", "Ma boutique", "Paiements"],
     contenu: {
+      hero: {
+        titre:
+          "Votre carte en ligne, et la commande arrive **écrite** sur WhatsApp.",
+        sousTitre:
+          "Carte, prix, options, stock. Il commande, vous recevez la référence.",
+      },
+      messageWa:
+        "Bonjour Killian, je vends des plats et des produits. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "La commande arrive écrite sur WhatsApp, avec le créneau et la référence.",
       demo: {
         texte:
@@ -129,6 +155,8 @@ const FAMILLES: Famille[] = [
   },
   {
     cle: "rdv",
+    bouton: "Je reçois",
+    qualificatif: "sur rendez-vous",
     carte: "Je reçois sur rendez-vous",
     promesse: "Coiffeur, barbier, onglerie, soins, réparation.",
     compte: "Deux rendez-vous à 25 € couvrent le mois.",
@@ -141,6 +169,14 @@ const FAMILLES: Famille[] = [
     lien: { href: "/rendez-vous", libelle: "Voir la version rendez-vous" },
     onglets: ["Rendez-vous", "Ma boutique", "Paiements"],
     contenu: {
+      hero: {
+        titre:
+          "Vos créneaux libres, et le rendez-vous arrive **écrit** sur WhatsApp.",
+        sousTitre:
+          "Prestations, durées, créneaux. Il réserve, vous confirmez d'un clic.",
+      },
+      messageWa:
+        "Bonjour Killian, je reçois sur rendez-vous. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "Le rendez-vous se pose dans votre carnet, pas dans une conversation.",
       demo: {
         texte:
@@ -197,6 +233,8 @@ const FAMILLES: Famille[] = [
   },
   {
     cle: "location",
+    bouton: "Je loue",
+    qualificatif: "biens, dates",
     carte: "Je loue un bien, un gîte, une intervention",
     promesse: "Canoë, vélo, engin, logement, chantier.",
     compte: "Une location de 50 € couvre le mois.",
@@ -206,9 +244,17 @@ const FAMILLES: Famille[] = [
       "Plusieurs exemplaires d'un même bien, chacun son stock.",
       "Caution notée, solde réclamé avant l'arrivée, acompte si vous voulez.",
     ],
-    lien: { href: "/habillages-rdv", libelle: "Voir un exemple de location" },
+    lien: { href: "/fonctions", libelle: "Tout ce que ça fait pour une location" },
     onglets: ["Locations", "Ma boutique", "Paiements"],
     contenu: {
+      hero: {
+        titre:
+          "Vos dates libres, et la réservation arrive **écrite** sur WhatsApp.",
+        sousTitre:
+          "Dates, prix calculé, caution notée. Il réserve, le planning se remplit.",
+      },
+      messageWa:
+        "Bonjour Killian, je loue des biens. Je voudrais ma boutique Ti-Boutik, vous pouvez me la créer ?",
       accroche: "Les dates libres se voient, le prix se calcule, le planning se remplit sans vous.",
       demo: {
         texte:
@@ -329,60 +375,111 @@ export default function LandingApp() {
     <div className="min-h-screen bg-cream pb-24 text-foreground sm:pb-0">
       <Header />
 
-      {/* 1 — Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 pb-16 pt-14 text-white sm:pt-20">
+      {/* 1 — Premier écran : la promesse, le métier, le prix, un bouton.
+             Le sélecteur ne s'ajoute pas au hero : il en fait partie, et le
+             titre change avec lui. Un visiteur ne lit donc jamais le métier
+             de quelqu'un d'autre. */}
+      <section
+        id="metier"
+        className="relative overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-900 px-4 pb-12 pt-9 text-white sm:pb-16 sm:pt-16"
+      >
         <div className="pointer-events-none absolute -right-16 -top-16 h-72 w-72 rounded-full bg-amber-400/20 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-10 h-72 w-72 rounded-full bg-teal-300/15 blur-3xl" />
 
         <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
           <div className="text-center lg:text-left">
             <FadeIn>
-              <p className="text-xs font-bold uppercase tracking-[.14em] text-amber-300">
-                Comptoir, rendez-vous, location — Guadeloupe &amp; Antilles
-              </p>
-            </FadeIn>
-            <FadeIn delay={0.05}>
-              <h1 className="mt-3 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-                Vos clients commandent, réservent ou louent.
-                <br className="hidden sm:block" /> Vous recevez{" "}
-                <span className="text-wa">tout prêt</span> sur WhatsApp.
+              <h1 className="mx-auto max-w-xl text-[26px] font-extrabold leading-tight tracking-tight sm:text-4xl lg:mx-0 lg:text-[42px]">
+                <Accent texte={c.hero.titre} />
               </h1>
             </FadeIn>
+
+            <FadeIn delay={0.05}>
+              <div
+                role="tablist"
+                aria-label="Votre métier"
+                className="mx-auto mt-5 flex gap-1.5 rounded-2xl bg-white/10 p-1.5 ring-1 ring-white/15 sm:max-w-md lg:mx-0"
+              >
+                {FAMILLES.map((f) => {
+                  const choisi = f.cle === famille;
+                  return (
+                    <button
+                      key={f.cle}
+                      role="tab"
+                      aria-selected={choisi}
+                      aria-label={f.carte}
+                      onClick={() => setFamille(f.cle)}
+                      className={`flex flex-1 flex-col items-center justify-center rounded-xl px-1.5 py-2 transition ${
+                        choisi
+                          ? "bg-white text-emerald-900 shadow-sm"
+                          : "text-emerald-50/80 hover:bg-white/10 hover:text-white"
+                      }`}
+                    >
+                      <span className="text-[12.5px] font-extrabold sm:text-sm">{f.bouton}</span>
+                      <span
+                        className={`mt-0.5 text-[10px] font-semibold ${
+                          choisi ? "text-emerald-700" : "text-emerald-100/60"
+                        }`}
+                      >
+                        {f.qualificatif}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </FadeIn>
+
             <FadeIn delay={0.1}>
-              <p className="mx-auto mt-5 max-w-xl text-lg text-emerald-50/90 lg:mx-0">
-                La boutique prend la forme de votre métier, et la demande arrive
-                écrite : nom, articles ou dates, créneau, référence.{" "}
-                <span className="font-semibold text-white">
-                  0 % de commission sur la vente.
-                </span>
+              <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-emerald-50/85 lg:mx-0">
+                {c.hero.sousTitre}
               </p>
             </FadeIn>
+
             <FadeIn delay={0.15}>
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
+              <div className="mt-5">
+                <p className="text-[26px] font-extrabold tracking-tight">
+                  39 €<span className="text-sm font-bold text-emerald-100/70">/mois</span>
+                </p>
+                <p className="mt-0.5 text-[13px] font-bold text-amber-200">{active.compte}</p>
+                <p className="mt-1 text-[12px] text-emerald-100/70">
+                  0 € pour créer · aucune commission · vous ne payez qu&apos;à la
+                  publication
+                </p>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.2}>
+              <div className="mt-5">
                 <a
                   href={LIEN_CREER}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:w-auto"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:mx-auto sm:w-auto lg:mx-0"
                 >
                   Créer ma boutique
                   <ArrowRight className="h-5 w-5" />
                 </a>
-                <Link
-                  href="/demo"
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white/10 px-6 py-3.5 text-base font-bold text-white backdrop-blur transition hover:bg-white/20 sm:w-auto"
-                >
-                  Voir une vraie boutique
-                </Link>
+                <p className="mt-3 text-[13px] text-emerald-100/80">
+                  ou{" "}
+                  <a
+                    href={`${CONTACT_WHATSAPP}?text=${encodeURIComponent(c.messageWa)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline decoration-emerald-300/50 underline-offset-4 transition hover:text-white"
+                  >
+                    je vous la crée en 10 minutes sur WhatsApp
+                  </a>
+                </p>
               </div>
             </FadeIn>
-            <FadeIn delay={0.2}>
-              <p className="mt-4 text-sm text-emerald-100/70">
-                0 € pour créer · sans carte bancaire · en privé tant que vous ne
-                publiez pas
-              </p>
-            </FadeIn>
           </div>
+
           <FadeIn delay={0.1} className="hidden justify-center lg:flex">
-            <HeroPhone />
+            {active.cle === "rdv" ? (
+              <HeroPhoneRdv />
+            ) : active.cle === "location" ? (
+              <HeroPhoneLocation />
+            ) : (
+              <HeroPhone />
+            )}
           </FadeIn>
         </div>
       </section>
@@ -392,7 +489,7 @@ export default function LandingApp() {
         <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-center text-xs font-semibold sm:text-sm">
           {[
             "0 % de commission sur vos ventes",
-            "39 €/mois seulement à la publication",
+            "0 € pour créer, sans carte bancaire",
             "Sans engagement, résiliable en un clic",
           ].map((p) => (
             <li key={p} className="flex items-center gap-1.5 text-emerald-50/90">
@@ -403,42 +500,97 @@ export default function LandingApp() {
         </ul>
       </section>
 
-      {/* 3 — Sélecteur de métier */}
-      <section id="metier" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:py-16">
-        <FadeIn>
-          <h2 className="text-3xl font-extrabold tracking-tight">
-            Quelle est votre façon de vendre ?
-          </h2>
-          <p className="mt-3 max-w-2xl text-zinc-600">
-            Trois façons de vendre, un seul outil. Cliquez sur la vôtre : la page
-            entière change de mots, d&apos;exemples et d&apos;écrans.
+      {/* 3 — La douleur d'abord. Avant, la page montrait la démo (la solution)
+             avant d'avoir nommé le problème ; or c'est cette phrase qui vend. */}
+      <section id="probleme" className="scroll-mt-20 border-t border-black/5 bg-white px-4 py-14 sm:py-16">
+        <div className="mx-auto max-w-4xl">
+          <FadeIn>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              Avant, ça passait par votre tête
+            </h2>
+          </FadeIn>
+          <div key={`${active.cle}-aa`} className="mt-8 overflow-hidden rounded-2xl ring-1 ring-black/5">
+            <div className="grid grid-cols-2 bg-zinc-100 text-[11px] font-bold uppercase tracking-[.12em] text-zinc-500">
+              <p className="px-4 py-2.5">Aujourd&apos;hui</p>
+              <p className="border-l border-black/5 px-4 py-2.5 text-emerald-800">Avec Ti-Boutik</p>
+            </div>
+            {c.avantApres.map(([avant, apres]) => (
+              <div key={avant} className="grid grid-cols-2 border-t border-black/5 bg-white">
+                <p className="px-4 py-3 text-[13.5px] text-zinc-600">{avant}</p>
+                <p className="border-l border-black/5 px-4 py-3 text-[13.5px] font-semibold text-emerald-900">
+                  {apres}
+                </p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-zinc-500">
+            Rien ne change pour vos habitudes : les demandes continuent d&apos;arriver
+            dans votre WhatsApp.
           </p>
-        </FadeIn>
+        </div>
+      </section>
 
-        <div className="mt-8 grid gap-3 md:grid-cols-3" role="tablist" aria-label="Famille de métier">
-          {FAMILLES.map((f) => {
-            const choisi = f.cle === famille;
-            return (
-              <button
-                key={f.cle}
-                role="tab"
-                aria-selected={choisi}
-                onClick={() => setFamille(f.cle)}
-                className={`rounded-2xl border p-5 text-left transition ${
-                  choisi
-                    ? "border-emerald-700 bg-white shadow-md ring-2 ring-emerald-700/20"
-                    : "border-black/10 bg-white/60 hover:border-emerald-700/40 hover:bg-white"
-                }`}
+      {/* 4 — La solution : la boutique telle que le client la voit, puis les
+             quatre choses que le commerçant ne gère plus à la main. */}
+      <section id="demo" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:py-16">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <FadeIn key={`${active.cle}-demo`}>
+            <h2 className="text-3xl font-extrabold tracking-tight">
+              Regardez-la comme votre client la verra
+            </h2>
+            <p className="mt-3 text-zinc-600">{c.demo.texte}</p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/demo"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
               >
-                <p className="text-[15px] font-extrabold leading-snug">{f.carte}</p>
-                <p className="mt-1 text-[13px] text-zinc-500">{f.promesse}</p>
-                <p className="mt-3 text-[13px] font-semibold text-emerald-800">{f.compte}</p>
-              </button>
-            );
-          })}
+                Ouvrir la démo
+                <ArrowRight className="h-5 w-5" />
+              </Link>
+              <a
+                href={LIEN_CREER}
+                className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-50"
+              >
+                Créer la mienne
+              </a>
+            </div>
+            <p className="mt-3 text-sm text-zinc-500">
+              C&apos;est une vraie boutique de l&apos;application, pas une maquette.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.1} className="flex justify-center">
+            <div className="w-full max-w-sm rounded-[2rem] bg-white p-4 shadow-xl ring-1 ring-black/5">
+              <div className="rounded-2xl bg-cream p-4">
+                <p className="text-[11px] font-bold uppercase tracking-[.14em] text-emerald-800">
+                  {c.demo.nom}
+                </p>
+                <p className="mt-1 text-[11px] font-semibold text-emerald-700">{c.demo.sous}</p>
+                {c.demo.lignes.map(([nom, prix]) => (
+                  <div
+                    key={nom}
+                    className="mt-3 flex items-center justify-between border-b border-black/5 pb-2 text-[13px]"
+                  >
+                    <span className="font-semibold">{nom}</span>
+                    <span className="text-zinc-500">{prix}</span>
+                  </div>
+                ))}
+                <div className="mt-3 flex items-center justify-between text-[13px] font-bold">
+                  <span>{c.demo.pied}</span>
+                  <span>{c.demo.total}</span>
+                </div>
+                <p className="mt-3 rounded-xl bg-wa px-3 py-2 text-center text-[12.5px] font-bold text-white">
+                  {c.demo.bouton}
+                </p>
+              </div>
+            </div>
+          </FadeIn>
         </div>
 
-        <FadeIn key={active.cle} className="mt-6 rounded-2xl bg-white p-6 ring-1 ring-black/5">
+        {/* La carte du métier : ce qu'il n'a plus à faire lui-même. Elle vivait
+            dans l'ancienne section « Quelle est votre façon de vendre ? » ; le
+            sélecteur ayant monté dans le premier écran, le contenu descend ici
+            au lieu de disparaître. */}
+        <FadeIn key={`${active.cle}-detail`} className="mt-10 rounded-2xl bg-white p-6 ring-1 ring-black/5">
           <p className="text-[15px] font-bold text-emerald-900">{c.accroche}</p>
           <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
             {active.detail.map((d) => (
@@ -458,7 +610,8 @@ export default function LandingApp() {
         </FadeIn>
       </section>
 
-      {/* 4 — Ce que le commerçant pilote */}
+      {/* 5 — Le différenciateur : l'espace commerçant, reconstruit en code (et
+             non en capture d'écran, qui vieillit au premier changement d'écran). */}
       <section id="piloter" className="scroll-mt-20 border-t border-black/5 bg-white px-4 py-14 sm:py-16">
         <div className="mx-auto max-w-6xl">
           <FadeIn>
@@ -475,7 +628,7 @@ export default function LandingApp() {
             </p>
           </FadeIn>
 
-          <div className="mx-auto mt-8 max-w-2xl">
+          <div className="mx-auto mt-8 max-w-3xl">
             <ApercuAdmin
               nomBoutique={c.demo.nom.split(" · ")[0]}
               libelles={active.onglets}
@@ -532,110 +685,50 @@ export default function LandingApp() {
         </div>
       </section>
 
-      {/* 5 — Démo */}
-      <section id="demo" className="scroll-mt-20 mx-auto max-w-6xl px-4 py-14 sm:py-16">
-        <div className="grid items-center gap-10 lg:grid-cols-2">
-          <FadeIn key={`${active.cle}-demo`}>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              Regardez-la comme votre client la verra
-            </h2>
-            <p className="mt-3 text-zinc-600">{c.demo.texte}</p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/demo"
-                className="flex items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
-              >
-                Ouvrir la démo
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-              <a
-                href={LIEN_CREER}
-                className="flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 ring-1 ring-emerald-200 transition hover:bg-emerald-50"
-              >
-                Créer la mienne
-              </a>
-            </div>
-            <p className="mt-3 text-sm text-zinc-500">
-              C&apos;est une vraie boutique de l&apos;application, pas une maquette.
-            </p>
-          </FadeIn>
-          <FadeIn delay={0.1} className="flex justify-center">
-            <div className="w-full max-w-sm rounded-[2rem] bg-white p-4 shadow-xl ring-1 ring-black/5">
-              <div className="rounded-2xl bg-cream p-4">
-                <p className="text-[11px] font-bold uppercase tracking-[.14em] text-emerald-800">
-                  {c.demo.nom}
-                </p>
-                <p className="mt-1 text-[11px] font-semibold text-emerald-700">{c.demo.sous}</p>
-                {c.demo.lignes.map(([nom, prix]) => (
-                  <div
-                    key={nom}
-                    className="mt-3 flex items-center justify-between border-b border-black/5 pb-2 text-[13px]"
-                  >
-                    <span className="font-semibold">{nom}</span>
-                    <span className="text-zinc-500">{prix}</span>
-                  </div>
-                ))}
-                <div className="mt-3 flex items-center justify-between text-[13px] font-bold">
-                  <span>{c.demo.pied}</span>
-                  <span>{c.demo.total}</span>
-                </div>
-                <p className="mt-3 rounded-xl bg-wa px-3 py-2 text-center text-[12.5px] font-bold text-white">
-                  {c.demo.bouton}
-                </p>
-              </div>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* 6 — Avant / après */}
-      <section id="probleme" className="scroll-mt-20 border-t border-black/5 bg-white px-4 py-14 sm:py-16">
-        <div className="mx-auto max-w-4xl">
+      {/* 6 — Qui est derrière, AVANT le prix. L'objection n°1 d'un commerçant
+             d'ici n'est pas le tarif, c'est « il va disparaître dans six mois ».
+             La proximité rassure avant qu'il regarde le prix, pas après. */}
+      <section className="border-t border-black/5 bg-cream px-4 py-14 sm:py-16">
+        <div className="mx-auto max-w-3xl">
           <FadeIn>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              Avant, ça passait par votre tête
+            <h2 className="text-2xl font-extrabold tracking-tight">
+              Qui est derrière Ti-Boutik
             </h2>
-          </FadeIn>
-          <div key={`${active.cle}-aa`} className="mt-8 overflow-hidden rounded-2xl ring-1 ring-black/5">
-            <div className="grid grid-cols-2 bg-zinc-100 text-[11px] font-bold uppercase tracking-[.12em] text-zinc-500">
-              <p className="px-4 py-2.5">Aujourd&apos;hui</p>
-              <p className="border-l border-black/5 px-4 py-2.5 text-emerald-800">Avec Ti-Boutik</p>
-            </div>
-            {c.avantApres.map(([avant, apres]) => (
-              <div key={avant} className="grid grid-cols-2 border-t border-black/5 bg-white">
-                <p className="px-4 py-3 text-[13.5px] text-zinc-600">{avant}</p>
-                <p className="border-l border-black/5 px-4 py-3 text-[13.5px] font-semibold text-emerald-900">
-                  {apres}
-                </p>
+            <div className="mt-6 rounded-2xl bg-white p-6 ring-1 ring-black/5">
+              <p className="text-[14.5px] leading-relaxed text-zinc-700">
+                Je m&apos;appelle Killian, je développe des sites pour des commerces
+                guadeloupéens. Ti-Boutik, c&apos;est mon outil : je le fais tourner,
+                je réponds moi-même sur WhatsApp, et je corrige ce qui bloque.
+                Avant, j&apos;ai fait tablemaster.fr, un logiciel de réservation pour
+                les restaurants, sans commission sur les couverts.
+              </p>
+              <ul className="mt-4 grid gap-2 text-[14px] text-zinc-700">
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
+                  Des boutiques réelles en démonstration, pas des maquettes.
+                </li>
+              </ul>
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
+                <span className="flex items-center gap-1.5 font-bold text-zinc-900">
+                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" /> 5,0
+                  <span className="font-medium text-zinc-500">· 4 avis Google</span>
+                </span>
+                <a
+                  href={AVIS_GOOGLE}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-4 text-zinc-600"
+                >
+                  Les lire
+                </a>
               </div>
-            ))}
-          </div>
-          <p className="mt-4 text-sm text-zinc-500">
-            Rien ne change pour vos habitudes : les demandes continuent d&apos;arriver
-            dans votre WhatsApp.
-          </p>
-        </div>
-      </section>
-
-      {/* 7 — Habillages */}
-      <section id="habillages" className="scroll-mt-20 border-t border-black/5 bg-cream px-4 py-14 sm:py-16">
-        <div className="mx-auto max-w-4xl text-center">
-          <FadeIn>
-            <h2 className="text-3xl font-extrabold tracking-tight">
-              La même maison, sept habillages
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-zinc-600">
-              Même contenu, même mécanique. Seul l&apos;habillage change : le
-              comptoir d&apos;avant, le papier crème, la table du bistrot. Vous
-              choisissez le vôtre, et vous en changez quand vous voulez.
-            </p>
-            <Link
-              href="/habillages"
-              className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-emerald-700 px-6 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-800"
-            >
-              Voir les sept habillages
-              <ArrowRight className="h-5 w-5" />
-            </Link>
+              {/* La phrase honnête : ces avis portent sur le développeur, pas sur
+                  le produit. Tant qu'aucun client n'utilise l'outil, on le dit. */}
+              <p className="mt-2 text-[12.5px] text-zinc-500">
+                Ces avis portent sur mon travail de développeur, pas encore sur le
+                produit.
+              </p>
+            </div>
           </FadeIn>
         </div>
       </section>
@@ -684,6 +777,12 @@ export default function LandingApp() {
                 Tout ce que ça fait
               </Link>
             </p>
+            <p className="mt-2 text-center text-[13px] text-zinc-500">
+              Sept habillages au choix, interchangeables à tout moment.{" "}
+              <Link href="/habillages" className="underline underline-offset-4">
+                Les voir
+              </Link>
+            </p>
           </div>
         </FadeIn>
       </section>
@@ -702,53 +801,6 @@ export default function LandingApp() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* 10 — Preuve et fondateur */}
-      <section className="border-t border-black/5 bg-cream px-4 py-14 sm:py-16">
-        <div className="mx-auto max-w-3xl">
-          <FadeIn>
-            <h2 className="text-center text-2xl font-extrabold tracking-tight">
-              Ce qu&apos;on peut affirmer aujourd&apos;hui
-            </h2>
-            <ul className="mx-auto mt-6 grid max-w-xl gap-2 text-[14px] text-zinc-700">
-              {[
-                "Des boutiques réelles en démonstration, pas des maquettes.",
-                "Sept habillages, interchangeables à tout moment.",
-                "4 avis Google publics, 5,0 — ils parlent du travail, pas du produit.",
-                "Aucune commission prélevée sur une vente.",
-              ].map((p) => (
-                <li key={p} className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
-                  {p}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 rounded-2xl bg-white p-6 ring-1 ring-black/5">
-              <p className="text-[14.5px] leading-relaxed text-zinc-700">
-                Je m&apos;appelle Killian, je développe des sites pour des commerces
-                guadeloupéens. Ti-Boutik, c&apos;est mon outil : je le fais tourner,
-                je réponds moi-même sur WhatsApp, et je corrige ce qui bloque.
-                Avant, j&apos;ai fait tablemaster.fr, un logiciel de réservation pour
-                les restaurants, sans commission sur les couverts.
-              </p>
-              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-                <span className="flex items-center gap-1.5 font-bold text-zinc-900">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" /> 5,0
-                  <span className="font-medium text-zinc-500">· 4 avis Google</span>
-                </span>
-                <a
-                  href={AVIS_GOOGLE}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="underline underline-offset-4 text-zinc-600"
-                >
-                  Les lire
-                </a>
-              </div>
-            </div>
-          </FadeIn>
         </div>
       </section>
 
@@ -826,9 +878,6 @@ function Header() {
           <span className="text-base font-bold tracking-tight">Ti-Boutik</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-emerald-100/80 lg:flex">
-          <a href="#metier" className="transition hover:text-white">
-            Votre métier
-          </a>
           <a href="#piloter" className="transition hover:text-white">
             Ce que vous pilotez
           </a>
@@ -908,6 +957,25 @@ function MobileContactBar() {
         </a>
       </div>
     </div>
+  );
+}
+
+function Accent({ texte }: { texte: string }) {
+  /* Un titre porte son mot décisif entre **étoiles** : « la commande arrive
+     **écrite** sur WhatsApp ». On le rend dans la couleur WhatsApp, sans
+     dangerouslySetInnerHTML — le contenu reste une chaîne, pas du HTML. */
+  return (
+    <>
+      {texte.split("**").map((part, i) =>
+        i % 2 ? (
+          <span key={i} className="text-wa">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
   );
 }
 

@@ -163,6 +163,43 @@ export function HeroPhoneRdv() {
   );
 }
 
+/* Et le troisième métier : des dates au lieu d'un créneau. Sans lui, choisir
+   « Je loue » dans le premier écran laissait un téléphone qui parlait de plats —
+   exactement ce que ce fichier interdit par son commentaire d'en-tête. */
+export function HeroPhoneLocation() {
+  const step = useLoop(4, 1500);
+  return (
+    <div className="mx-auto w-full max-w-[280px]">
+      <PhoneFrame heightClassName="h-[420px]">
+        <StatusBar time="14:32" />
+        <MiniChatHeader
+          title="Kanoé Kreyol · Location"
+          status="En ligne"
+          icon={<Sailboat className="h-4 w-4 text-white" />}
+        />
+        <div className="wa-chat-bg no-scrollbar flex-1 overflow-hidden px-3 py-3">
+          <div className="mx-auto mb-3 w-max rounded-lg bg-white/60 px-3 py-1 text-[10px] text-zinc-500">
+            Aujourd&apos;hui
+          </div>
+          <AnimatePresence>
+            <MiniBubble side="out" key="client">
+              🛶 2 canoës, du 12 au 15 août ?
+            </MiniBubble>
+            {step === 1 && <TypingDots key="typing" />}
+            {step >= 2 && (
+              <MiniBubble side="in" key="merchant">
+                C&apos;est libre ✅<br />
+                90 € · caution notée 🌴
+              </MiniBubble>
+            )}
+          </AnimatePresence>
+        </div>
+        <ChatInput />
+      </PhoneFrame>
+    </div>
+  );
+}
+
 const COMMERCES = [
   {
     id: "resto",
