@@ -395,8 +395,11 @@ export default function LandingApp() {
             </FadeIn>
 
             <FadeIn delay={0.05}>
+              {/* Un filtre, pas des onglets : trois boutons dont un seul est
+                  enfoncé (aria-pressed). Le patron ARIA « tab » exigerait des
+                  tabpanels et un roving tabindex — il n'y a qu'une page. */}
               <div
-                role="tablist"
+                role="group"
                 aria-label="Votre métier"
                 className="mx-auto mt-5 flex gap-1.5 rounded-2xl bg-white/10 p-1.5 ring-1 ring-white/15 sm:max-w-md lg:mx-0"
               >
@@ -405,8 +408,8 @@ export default function LandingApp() {
                   return (
                     <button
                       key={f.cle}
-                      role="tab"
-                      aria-selected={choisi}
+                      type="button"
+                      aria-pressed={choisi}
                       aria-label={f.carte}
                       onClick={() => setFamille(f.cle)}
                       className={`flex flex-1 flex-col items-center justify-center rounded-xl px-1.5 py-2 transition ${
