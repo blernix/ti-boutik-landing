@@ -165,7 +165,8 @@ export function HeroPhoneRdv() {
 
 /* Et le troisième métier : des dates au lieu d'un créneau. Sans lui, choisir
    « Je loue » dans le premier écran laissait un téléphone qui parlait de plats —
-   exactement ce que ce fichier interdit par son commentaire d'en-tête. */
+   or la page promet, depuis `components/landing-app.tsx`, qu'« un loueur de
+   canoës ne doit jamais lire “vos plats” ». */
 export function HeroPhoneLocation() {
   const step = useLoop(4, 1500);
   return (

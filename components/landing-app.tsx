@@ -440,19 +440,6 @@ export default function LandingApp() {
 
             <FadeIn delay={0.15}>
               <div className="mt-5">
-                <p className="text-[26px] font-extrabold tracking-tight">
-                  39 €<span className="text-sm font-bold text-emerald-100/70">/mois</span>
-                </p>
-                <p className="mt-0.5 text-[13px] font-bold text-amber-200">{active.compte}</p>
-                <p className="mt-1 text-[12px] text-emerald-100/70">
-                  0 € pour créer · aucune commission · vous ne payez qu&apos;à la
-                  publication
-                </p>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <div className="mt-5">
                 <a
                   href={LIEN_CREER}
                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-base font-bold text-emerald-800 shadow-lg transition hover:bg-emerald-50 sm:inline-flex sm:w-auto"
@@ -460,6 +447,14 @@ export default function LandingApp() {
                   Créer ma boutique
                   <ArrowRight className="h-5 w-5" />
                 </a>
+                <p className="mt-4 text-[22px] font-extrabold tracking-tight">
+                  39 €<span className="text-sm font-bold text-emerald-100/70">/mois</span>
+                </p>
+                <p className="mt-0.5 text-[13px] font-bold text-amber-200">{active.compte}</p>
+                <p className="mt-1 text-[12px] text-emerald-100/70">
+                  0 € pour créer · aucune commission · vous ne payez qu&apos;à la
+                  publication
+                </p>
                 <p className="mt-3 text-[13px] text-emerald-100/80">
                   ou{" "}
                   <a
@@ -728,8 +723,8 @@ export default function LandingApp() {
               {/* La phrase honnête : ces avis portent sur le développeur, pas sur
                   le produit. Tant qu'aucun client n'utilise l'outil, on le dit. */}
               <p className="mt-2 text-[12.5px] text-zinc-500">
-                Ces avis portent sur mon travail de développeur, pas encore sur le
-                produit.
+                Ces avis sont ceux de mes clients développeur : ils parlent du
+                travail, pas du produit.
               </p>
             </div>
           </FadeIn>
